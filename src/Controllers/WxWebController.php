@@ -49,7 +49,7 @@ class WxWebController extends BaseController
             $token_response['scope']);
         $target_url = strpos($target_url, '?') > 0 ? ($target_url . '&openid=' . $user['id'])
             : ($target_url . '?openid=' . $user['id']);
-        $target_url = $target_url . '&' . config('deep_login.check_login_param') . '=' . $userService->gen_token($user_id);
+        $target_url = $target_url . '&' . config('deep_login.check_login_param') . '=' . $userService->genToken($user_id);
         debug_log_info('target_url = ' . $target_url);
         header('Location:' . $target_url);
     }
