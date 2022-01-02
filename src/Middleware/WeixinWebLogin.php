@@ -31,7 +31,7 @@ class WeixinWebLogin
             $oauth = $app->oauth;
             $target_url = $request->input('target_url', url()->full());
             $is_api = $request->input('is_api', false);
-            $redirectUrl = $oauth->redirect(route('weixin.default_login',
+            $redirectUrl = $oauth->redirect(route('wxweb.default_login',
                 ['app_id' => $app_id, 'target_url' => $target_url]));
             debug_log_info('redirectUrl = ' . $redirectUrl);
             if ($is_api) {
