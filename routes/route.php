@@ -6,8 +6,8 @@ Route::group([
     'prefix' => 'Api',
     'namespace' => 'Andruby\\Login\\Controllers',
 ], function (Router $router) {
-    $router->get('Weixin/callback', 'WxWebController@callback')->name('weixin.callback');
-    $router->get('Weixin/default_login', 'WxWebController@default_login')->name('weixin.default_login');
+    $router->get('WxWeb/callback', 'WxWebController@callback')->name('wxweb.callback');
+    $router->get('WxWeb/default_login', 'WxWebController@default_login')->name('wxweb.default_login');
 });
 
 Route::group([
@@ -23,7 +23,7 @@ Route::group([
     'namespace' => 'Andruby\\Login\\Controllers',
     'middleware' => 'login.weixin.web'
 ], function (Router $router) {
-    $router->get('Weixin/is_login', 'WxWebController@is_login')->name('weixin.is_login');
-    $router->post('Weixin/is_login', 'WxWebController@is_login')->name('weixin.is_login');
+    $router->get('WxWeb/is_login', 'WxWebController@is_login')->name('wxweb.is_login');
+    $router->post('WxWeb/is_login', 'WxWebController@is_login')->name('wxweb.is_login');
 });
 
