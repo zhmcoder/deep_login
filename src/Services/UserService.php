@@ -20,7 +20,7 @@ class UserService implements IUserService
         return new self();
     }
 
-    public function register($openid, $nickname, $avatar, $unionid,
+    public function register($openid, $nickname, $avatar, $unionid, $area_info = null,
                              $user_type = IUserService::USER_TYPE_WX_WEB,
                              $access_token = null, $refresh_token = null,
                              $expires_in = null, $scope = null)
@@ -28,7 +28,7 @@ class UserService implements IUserService
         $user_info = UcenterMember::where('username', $openid)->first();
 
         if (empty($user_info)) {
-            $user_id = UcenterMember::wx_register($openid, $unionid,
+            $user_id = UcenterMember::wx_register($openid, $unionid, $user_type,
                 $access_token, $refresh_token, $expires_in, $scope);
             if (!MemberInfo::register($user_id, $nickname, $avatar)) {
                 UcenterMember::where('id', $user_id)->delete();
@@ -76,6 +76,69 @@ class UserService implements IUserService
     public function defaultNickname($user_id)
     {
         return config('deep_login.nickname_pre') . mt_rand(10, 99) . $user_id . mt_rand(10, 99);
+    }
+
+    public function dealWxInfo($wxInfo)
+    {
+        if (array_key_exists('nickname', $wxInfo)) {
+            $userData['nickname'] = $wxInfo['nickname'];
+        } else {
+            $userData['nickname'] = $wxInfo['nickName'];
+        }
+
+        if (array_key_exists('headimgurl', $wxInfo)) {
+            $userData['avatar_small'] = $wxInfo['headimgurl'];
+            $userData['avatar'] = $wxInfo['headimgurl'];
+        } else {
+            $userData['avatar_small'] = $wxInfo['avatarUrl'];
+            $userData['avatar'] = $wxInfo['avatarUrl'];
+        }
+
+        if (array_key_exists('sex', $wxInfo)) {
+            $userData['sex'] = $wxInfo['sex'];
+        } else {
+            $userData['sex'] = $wxInfo['gender'];
+        }
+
+        if (array_key_exists('language', $wxInfo)) {
+            $userData['language'] = $wxInfo['language'];
+        } else {
+            $userData['language'] = null;
+        }
+
+        if (array_key_exists('language', $wxInfo)) {
+            $userData['language'] = $wxInfo['language'];
+        } else {
+            $userData['language'] = null;
+        }
+        if (array_key_exists('city', $wxInfo)) {
+            $userData['city'] = $wxInfo['city'];
+        } else {
+            $userData['city'] = null;
+        }
+        if (array_key_exists('province', $wxInfo)) {
+            $userData['province'] = $wxInfo['province'];
+        } else {
+            $userData['province'] = null;
+        }
+        if (array_key_exists('country', $wxInfo)) {
+            $userData['country'] = $wxInfo['country'];
+        } else {
+            $userData['country'] = null;
+        }
+        if (array_key_exists('unionid', $wxInfo)) {
+            $userData['unionid'] = $wxInfo['unionid'];
+        } else {
+            $userData['unionid'] = null;
+        }
+
+        if (array_key_exists('openId', $wxInfo)) {
+            $userData['openId'] = $wxInfo['openId'];
+        } else {
+            $userData['openId'] = null;
+        }
+
+        return $userData;
     }
 
 

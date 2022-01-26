@@ -14,8 +14,11 @@ Route::group([
     'prefix' => 'Api',
     'namespace' => 'Andruby\\Login\\Controllers',
 ], function (Router $router) {
+    //手机号登录
     $router->post('Mobile/verify_code', 'MobileController@verify_code')->name('mobile.verify_code');
     $router->post('Mobile/login', 'MobileController@login')->name('mobile.login');
+    //小程序登录
+    $router->post('WxMini/login', 'WxMiniController@login')->name('wx_mini.login');
 });
 
 Route::group([

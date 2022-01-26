@@ -40,4 +40,10 @@ return [
             'default_app_id' => ''
         ]
     ],
+    //小程序登录配置
+    'wx_mini_app_id_default' => '',
+    'wx21e205bfb5ccdefd' => [
+        'app_secret' => '',
+        'app_id' => 'wx21e205bfb5ccdefd',
+    ],
 ];

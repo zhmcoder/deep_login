@@ -147,7 +147,7 @@ class UcenterMember extends Authenticatable
 
         $data['reg_ip'] = request()->getClientIp();
         $data['status'] = 1;
-        $data['user_type'] = 2;
+        $data['user_type'] = $user_type;
 
         $data = UcenterMember::create($data);
         return $data['id'];

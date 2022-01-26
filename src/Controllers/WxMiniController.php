@@ -2,6 +2,10 @@
 
 namespace Andruby\Login\Controllers;
 
+
+use Andruby\Login\Services\Interfaces\IUserService;
+use Andruby\Login\Services\UserService;
+use Andruby\Login\Services\XcxService;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 
@@ -12,58 +16,54 @@ use EasyWeChat\Factory;
  */
 class WxMiniController extends BaseController
 {
-
-    public function callback(Request $request)
+    public function login(Request $request)
     {
-        $app_id = $request->input('app_id');
-        $app = Factory::officialAccount(config('huaidan.' . $app_id));
-        return $app->server->serve();
-    }
-
-    public function default_login(Request $request)
-    {
-        $target_url = $request->input('target_url');
-        $app_id = $request->input('app_id');
         $code = $request->input('code');
-        debug_log_info('target_url = ' . $target_url);
-        debug_log_info('app_id = ' . $app_id);
-        debug_log_info('code = ' . $code);
+        $loginData = $request->input('loginData');
 
-        $app = Factory::officialAccount(config('huaidan.' . $app_id));
-        $oauth = $app->oauth;
-
-        $user = $oauth->userFromCode($code);
-        debug_log_info('user = ' . json_encode($user));
-        $user = $user->toArray();
-
-        $userService = config('deep_login.user_service');
-        $userService = new $userService;
-        debug_log_info('user open id = ' . $user['id']);
-        if (empty($user['id'])) {
-            $user['id'] = $user['token_response']['openid'];
+        if (is_string($loginData)) {
+            $loginData = json_decode($loginData, true);
         }
-        $token_response = $user['token_response'];
-        $user_id = $userService->register($user['id'], $user['nickname'], $user['avatar'],
-            null, $token_response['access_token'], $token_response['refresh_token'], $token_response['expires_in'],
-            $token_response['scope']);
 
-        $target_url = strpos($target_url, '?') > 0 ? ($target_url . '&openid=' . $user['id'])
-            : ($target_url . '?openid=' . $user['id']);
-        $target_url = $target_url . '&' . config('deep_login.check_login_param') . '=' . $userService->gen_token($user_id);
-        debug_log_info('target_url = ' . $target_url);
-        header('Location:' . $target_url);
+        $mini_app_id = $request->input('mini_app_id', config('deep_login.wx_mini_app_id_default'));
+
+
+        $wxSession = XcxService::getXcxSession($mini_app_id,
+            config('deep_login.' . $mini_app_id . '.app_secret'), $code);
+        if (!$wxSession) {
+            $this->responseJson(-1, "微信授权失败,请重新授权。", null);
+        }
+
+        if (key_exists('encryptedData', $loginData) && key_exists('iv', $loginData)) {
+            $user_info = XcxService::decryptData($mini_app_id, $wxSession['openid'],
+                $loginData['encryptedData'], $loginData['iv']);
+            debug_log_info('user info = ' . json_encode($user_info));
+        } else {
+            $user_info = $loginData['userInfo'];
+        }
+        debug_log_info('user info 1 = ' . json_encode($loginData['userInfo']));
+
+        debug_log_info('user info = ' . json_encode($user_info));
+        if (empty($user_info) || (key_exists('status', $user_info) && $user_info['status'] == '1001')) {
+            $this->responseJson('1001', '需要登录');
+        }
+        $user_info['openId'] = $wxSession['openid'];
+
+        //create ucentermember
+        $userService = config('deep_login.user_service');
+//        $userService = new $userService;
+        $userService = new UserService();
+        $user_info = $userService->dealWxInfo($user_info);
+
+        $user_id = $userService->register($user_info['openId'], $user_info['nickname'],
+            $user_info['avatar'], $user_info['unionid'], null,
+            IUserService::USER_TYPE_WX_MINI, null,
+            null, null);
+        $data = $userService->userInfo($user_id);
+        $data['token'] = $userService->genToken($user_id);
+        $this->responseJson('0', '', $data);
     }
 
-    public function is_login(Request $request)
-    {
-        $token = $request->input('token', null);
-        $data['token'] = $token;
-        $this->response(0, 'success', $data);
-    }
-
-    public function login(){
-
-    }
 
 }
 

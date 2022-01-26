@@ -31,8 +31,8 @@ interface IUserService
 
     public function defaultNickname($user_id);
 
-    public function register($openid, $nickname,
-                             $avatar, $unionid, $user_type = IUserService::USER_TYPE_WX_WEB, $access_token = null,
+    public function register($openid, $nickname, $avatar, $unionid, $area_info,
+                             $user_type = IUserService::USER_TYPE_WX_WEB, $access_token = null,
                              $refresh_token = null, $expires_in = null,
                              $scope = null);
 
