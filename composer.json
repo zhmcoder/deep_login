@@ -1,5 +1,6 @@
 {
     "name": "andruby/deep-login",
+    "description": "登录组件封装，适配uniapp、小程序后台接口",
     "license": "MIT",
     "authors": [
         {
