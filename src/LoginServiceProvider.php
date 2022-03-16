@@ -2,6 +2,7 @@
 
 namespace Andruby\Login;
 
+use Andruby\DeepLogin\Commands\InstallCommand;
 use Andruby\Login\Middleware\WeixinWebLogin;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,6 +11,10 @@ class LoginServiceProvider extends ServiceProvider
 
     protected array $routeMiddleware = [
         'login.weixin.web' => WeixinWebLogin::class
+    ];
+
+    protected $commands = [
+        InstallCommand::class
     ];
 
     public function boot()
@@ -30,6 +35,10 @@ class LoginServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/deep_login.php', 'deep_login');
 
         $this->registerRouteMiddleware();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands($this->commands);
+        }
     }
 
 
