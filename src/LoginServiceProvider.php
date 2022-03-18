@@ -36,9 +36,9 @@ class LoginServiceProvider extends ServiceProvider
 
         $this->registerRouteMiddleware();
 
-        if ($this->app->runningInConsole()) {
-            $this->commands($this->commands);
-        }
+//        if ($this->app->runningInConsole()) {
+//            $this->commands($this->commands);
+//        }
     }
 
 
