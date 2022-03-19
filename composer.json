@@ -35,7 +35,6 @@
             "Tests\\": "tests"
         },
         "classmap": [
-            "tests/Factories"
         ]
     },
     "extra": {
