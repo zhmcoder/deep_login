@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class LoginServiceProvider extends ServiceProvider
 {
 
-    protected array $routeMiddleware = [
+    protected $routeMiddleware = [
         'login.weixin.web' => WeixinWebLogin::class
     ];
 
