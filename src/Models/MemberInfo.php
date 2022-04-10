@@ -73,7 +73,7 @@ use Illuminate\Database\Eloquent\Model;
 class MemberInfo extends Model
 {
 
-    protected $table = 'bmh_member';
+    protected $table = 'member';
 
     /**
      * The attributes that are mass assignable.

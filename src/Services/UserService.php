@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Andruby\Login\Services;
 
 use Andruby\Login\Models\MemberInfo;
@@ -10,8 +9,8 @@ use Andruby\Login\Services\Interfaces\IUserService;
 /**
  * @method static UserService instance()
  *
- * Class ChargeService
- * @package App\Api\Services
+ * Class UserService
+ * @package Andruby\Login\Services
  */
 class UserService implements IUserService
 {

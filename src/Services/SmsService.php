@@ -1,18 +1,15 @@
 <?php
 
-
 namespace Andruby\Login\Services;
 
-
-use Andruby\Login\Libs\Sms\AliSms;
 use Andruby\Login\Models\VerifyCode;
 use Andruby\Login\Services\Interfaces\ISmsService;
 
 /**
  * @method static SmsService instance()
  *
- * Class ChargeService
- * @package App\Api\Services
+ * Class SmsService
+ * @package Andruby\Login\Services
  */
 class SmsService implements ISmsService
 {

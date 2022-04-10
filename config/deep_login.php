@@ -1,22 +1,26 @@
 <?php
 
+use Andruby\Login\Libs\Sms\AliSms;
+use Andruby\Login\Services\SmsService;
+use Andruby\Login\Services\UserService;
+
 return [
 
     //implements IUserService
-    'user_service' => \Andruby\Login\Services\UserService::class,
+    'user_service' => UserService::class,
     //implements ISmsService
-    'sms_service' => \Andruby\Login\Services\SmsService::class,
+    'sms_service' => SmsService::class,
 
     'check_login_type' => 'url',//cookie,url
     'check_login_param' => 'token',
-    'default_head_url' => 'http://img.zdapk.cn/head_defualt.jpeg',
+    'default_head_url' => 'http://cdn.image.lifeano.cn/head_defualt.jpeg',
     'nickname_pre' => '用户',
 
     'default_sms_code' => '1111',
     'ignore_mobile' => ['13581714392'],
     'sms_resend_time' => 60,
     'sms_expired_time' => 10 * 60,
-    'sms_send' => \Andruby\Login\Libs\Sms\AliSms::class,
+    'sms_send' => AliSms::class,
 
     'netease_sms' => [
         'app_key' => '',

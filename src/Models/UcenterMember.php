@@ -58,7 +58,7 @@ class UcenterMember extends Authenticatable
 {
     use Notifiable, HasApiToken;
 
-    protected $table = 'bmh_ucenter_member';
+    protected $table = 'ucenter_member';
 
     /**
      * The attributes that are mass assignable.

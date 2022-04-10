@@ -2,17 +2,15 @@
 
 namespace Andruby\Login\Controllers;
 
-
 use Andruby\Login\Services\Interfaces\IUserService;
 use Andruby\Login\Services\UserService;
 use Andruby\Login\Services\XcxService;
 use Illuminate\Http\Request;
-use EasyWeChat\Factory;
 
 /**
  * 微信小程序登录
- * Class WeixinController
- * @package App\Api\Controllers
+ * Class WxMiniController
+ * @package Andruby\Login\Controllers
  */
 class WxMiniController extends BaseController
 {

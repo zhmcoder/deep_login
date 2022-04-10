@@ -8,16 +8,15 @@ use EasyWeChat\Factory;
 
 /**
  * 微信公众号web相关登录
- * Class WeixinController
- * @package App\Api\Controllers
+ * Class WxWebController
+ * @package Andruby\Login\Controllers
  */
 class WxWebController extends BaseController
 {
-
     public function callback(Request $request)
     {
         $app_id = $request->input('app_id');
-        $app = Factory::officialAccount(config('huaidan.' . $app_id));
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
         return $app->server->serve();
     }
 
@@ -30,7 +29,7 @@ class WxWebController extends BaseController
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);
 
-        $app = Factory::officialAccount(config('huaidan.' . $app_id));
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $oauth = $app->oauth;
 
         $user = $oauth->userFromCode($code);

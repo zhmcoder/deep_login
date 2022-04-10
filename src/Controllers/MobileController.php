@@ -2,21 +2,16 @@
 
 namespace Andruby\Login\Controllers;
 
-use Andruby\Login\Libs\Sms\AliSms;
-use Andruby\Login\Services\SmsService;
-use Andruby\Login\Services\UserService;
 use Andruby\Login\Validates\MobileValidate;
 use Illuminate\Http\Request;
-use EasyWeChat\Factory;
 
 /**
  * 手机号登录
- * Class WeixinController
- * @package App\Api\Controllers
+ * Class MobileController
+ * @package Andruby\Login\Controllers
  */
 class MobileController extends BaseController
 {
-
     public function verify_code(Request $request, MobileValidate $validate)
     {
         $validate_result = $validate->verify_code($request->only(['mobile', 'img_code']));
