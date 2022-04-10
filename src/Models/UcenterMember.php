@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Models;
+namespace Andruby\Login\Models;
 
 use Andruby\ApiToken\HasApiToken;
 use Illuminate\Foundation\Auth\User as Authenticatable;

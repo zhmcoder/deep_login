@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Models;
+namespace Andruby\Login\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
