@@ -2,7 +2,7 @@
 
 namespace Andruby\Login\Services;
 
-use Andruby\Login\Models\MemberInfo;
+use Andruby\Login\Models\Member;
 use Andruby\Login\Models\UcenterMember;
 use Andruby\Login\Services\Interfaces\IUserService;
 
@@ -29,7 +29,7 @@ class UserService implements IUserService
         if (empty($user_info)) {
             $user_id = UcenterMember::wx_register($openid, $unionid, $user_type,
                 $access_token, $refresh_token, $expires_in, $scope);
-            if (!MemberInfo::register($user_id, $nickname, $avatar)) {
+            if (!Member::register($user_id, $nickname, $avatar)) {
                 UcenterMember::where('id', $user_id)->delete();
                 return 0;
             }
@@ -44,7 +44,7 @@ class UserService implements IUserService
         $user_info = UcenterMember::where('username', $mobile)->first();
         if (empty($user_info)) {
             $user_id = UcenterMember::mobile_register($mobile);
-            if (!MemberInfo::mobile_register($user_id,
+            if (!Member::mobile_register($user_id,
                 $this->defaultNickname($user_id))) {
                 UcenterMember::where('id', $user_id)->delete();
                 return 0;
@@ -63,7 +63,7 @@ class UserService implements IUserService
 
     public function userInfo($user_id)
     {
-        $userInfo = MemberInfo::where('uid', $user_id)
+        $userInfo = Member::where('uid', $user_id)
             ->first(['uid as user_id', 'nickname', 'head_pic', 'head_pic_small']);
         if ($userInfo) {
             $userInfo = $userInfo->toArray();

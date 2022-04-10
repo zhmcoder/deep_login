@@ -1,20 +1,14 @@
 <?php
 
-namespace Andruby\Login\Models;
+namespace App\Api\Models;
 
 use Andruby\ApiToken\HasApiToken;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * App\Models\UcenterMember
+ * App\Api\Models\UcenterMember
  *
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
- * @mixin \Eloquent
  * @property int $id 用户ID
  * @property string $username 用户名，手机注册时候是手机号，微信注册时是unionid
  * @property string $password 密码
@@ -33,8 +27,13 @@ use Illuminate\Notifications\Notifiable;
  * @property int|null $expires_in 微信授权过期时间
  * @property string|null $refresh_token 微信刷新token
  * @property string|null $scope 微信授权范围
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Andruby\ApiToken\ApiToken[] $tokens
  * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember query()
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereAccessToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereExpiresIn($value)
@@ -53,12 +52,11 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereUpdateTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereUserType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UcenterMember whereUsername($value)
+ * @mixin \Eloquent
  */
 class UcenterMember extends Authenticatable
 {
     use Notifiable, HasApiToken;
-
-    protected $table = 'ucenter_member';
 
     /**
      * The attributes that are mass assignable.

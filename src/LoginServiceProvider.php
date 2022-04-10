@@ -2,7 +2,7 @@
 
 namespace Andruby\Login;
 
-use Andruby\DeepLogin\Commands\InstallCommand;
+use Andruby\Login\Console\InstallCommand;
 use Andruby\Login\Middleware\WeixinWebLogin;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,9 +36,7 @@ class LoginServiceProvider extends ServiceProvider
 
         $this->registerRouteMiddleware();
 
-//        if ($this->app->runningInConsole()) {
-//            $this->commands($this->commands);
-//        }
+        $this->commands($this->commands);
     }
 
 
