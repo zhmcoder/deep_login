@@ -49,10 +49,6 @@ return [
     'wx21e205bfb5ccdefd' => [
         'app_secret' => '',
         'app_id' => 'wx21e205bfb5ccdefd',
-        // 'snsapi_base', 'snsapi_userinfo' 公众平台网页授权获取用户信息
-        // 'snsapi_login' 开放平台网页登录
-        'scopes' => ['snsapi_base', 'snsapi_userinfo', 'snsapi_login'],
-        'callback' => '/oauth_callback',
     ],
     //公众号登录信息
     'wxc7550ea08bdfd55c' => [

@@ -44,8 +44,9 @@ class WeixinWebLogin
                 $data['redirectUrl'] = $redirectUrl;
                 return response($data);
             } else {
-                header("Location: {$redirectUrl}");
-                exit;
+                return \redirect($redirectUrl);
+                // header("Location: {$redirectUrl}");
+                // exit;
             }
         } else {
             $data['code'] = -1;
