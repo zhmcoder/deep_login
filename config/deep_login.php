@@ -60,6 +60,9 @@ return [
         'default_login' => [
             'scopes' => ['snsapi_userinfo'],
             'callback' => '/Api/WxWeb/default_login',
-        ]
+        ],
+        'qrcode' => [
+            'scene' => 'login',
+        ],
     ],
 ];
