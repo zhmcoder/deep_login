@@ -22,8 +22,11 @@ class WxQrcodeController extends BaseController
         $result = $qrcode->forever(config('deep_login.' . $app_id . '.qrcode.scene'));
         debug_log_info('qrcode result = ' . json_encode($result));
 
-        if (!empty($result['url'])) {
-            $content = file_get_contents($result['url']);
+        if (!empty($result['ticket'])) {
+            $url = $qrcode->url($result['ticket']);
+            debug_log_info('qrcode url = ' . $url);
+
+            $content = file_get_contents($url);
             $filename = md5($content) . '.jpeg';
             $dir = storage_path('app/public/qrcode/');
             if (!is_dir($dir)) {
