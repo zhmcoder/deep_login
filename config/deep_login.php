@@ -52,14 +52,14 @@ return [
     ],
     //公众号登录信息
     'wxc7550ea08bdfd55c' => [
-        'app_id' => 'id：wxc7550ea08bdfd55c',
+        'app_id' => 'wxc7550ea08bdfd55c',
         'secret' => '',
         'token' => '',
         'aes_key' => '',
         'response_type' => 'array',
         'default_login' => [
             'scopes' => ['snsapi_base'],
-            'callback' => '/Api/Weixin/default_login',
+            'callback' => '/Api/WxWeb/default_login',
         ]
     ],
 ];
