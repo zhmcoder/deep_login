@@ -9,17 +9,17 @@ class BaseController extends Controller
     /**
      * 成功code码
      */
-    public $STATUS_SUCCESS = 0;
+    const STATUS_SUCCESS = 200;
 
     /**
      * 失败code码
      */
-    public $STATUS_FAILED = 1;
+    const STATUS_FAILED = -1;
 
-    protected function responseJson($status = -1, $msg = null, $data = null)
+    protected function responseJson($code = self::STATUS_SUCCESS, $message = null, $data = null)
     {
-        $response["status"] = $status;
-        $response["msg"] = $msg;
+        $response["code"] = $code;
+        $response["message"] = $message;
         if (!empty($data)) {
             $response["data"] = $data;
         }

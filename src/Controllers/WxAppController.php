@@ -56,14 +56,9 @@ class WxAppController extends BaseController
     public function is_login(Request $request)
     {
         $token = $request->input('token', null);
+
         $data['token'] = $token;
-        $this->response(0, 'success', $data);
+        $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
     }
-
-    public function login()
-    {
-
-    }
-
 }
 

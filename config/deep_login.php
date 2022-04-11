@@ -58,7 +58,7 @@ return [
         'aes_key' => '',
         'response_type' => 'array',
         'default_login' => [
-            'scopes' => ['snsapi_base'],
+            'scopes' => ['snsapi_userinfo'],
             'callback' => '/Api/WxWeb/default_login',
         ]
     ],
