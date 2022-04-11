@@ -60,8 +60,8 @@ class XcxService
             debug_log_info('login data info = ' . $data_info);
             return json_decode($data_info, true);
         } else {
-            $data['status'] = 1001;
-            $data['msg'] = '小程序需要重新登录';
+            $data['code'] = 1001;
+            $data['message'] = '小程序需要重新登录';
             return $data;
         }
     }
