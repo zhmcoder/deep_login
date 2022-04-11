@@ -54,4 +54,15 @@ return [
         'scopes' => ['snsapi_base', 'snsapi_userinfo', 'snsapi_login'],
         'callback' => '/oauth_callback',
     ],
+    //公众号登录信息
+    'wxc7550ea08bdfd55c' => [
+        'app_id' => 'id：wxc7550ea08bdfd55c',
+        'secret' => '',
+        'token' => '',
+        'response_type' => 'array',
+        'default_login' => [
+            'scopes' => ['snsapi_base'],
+            'callback' => '/Api/Weixin/default_login',
+        ]
+    ],
 ];
