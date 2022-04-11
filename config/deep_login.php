@@ -55,6 +55,7 @@ return [
         'app_id' => 'id：wxc7550ea08bdfd55c',
         'secret' => '',
         'token' => '',
+        'aes_key' => '',
         'response_type' => 'array',
         'default_login' => [
             'scopes' => ['snsapi_base'],
