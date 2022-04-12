@@ -36,7 +36,7 @@ class WxQrcodeController extends BaseController
             $qrcodeUrl = $dir . $filename;
             file_put_contents($qrcodeUrl, $content);
 
-            $data['qrcode_url'] = $qrcodeUrl;
+            $data['qrcode_url'] = http_path('qrcode/' . $filename);
             $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
         } else {
             $this->responseJson(self::STATUS_FAILED, 'fail', $result);

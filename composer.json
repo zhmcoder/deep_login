@@ -20,7 +20,7 @@
         "illuminate/auth": "~5|~6|~7|~8",
         "alibabacloud/sdk": "^1.8",
         "andruby/tokens-auth": "^0.1",
-        "w7corp/easywechat": "^5.0"
+        "w7corp/easywechat": "~4|~5|~6"
     },
     "require-dev": {
         "orchestra/testbench": "^3.5",
