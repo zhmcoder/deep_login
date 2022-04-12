@@ -99,7 +99,7 @@ CREATE TABLE `ucenter_members`
     `mobile`          char(32)         NOT NULL DEFAULT '' COMMENT '用户手机',
     `phone`           char(15)                  DEFAULT NULL COMMENT '小鹅通绑定手机号',
     `reg_time`        int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '注册时间',
-    `reg_ip`          bigint(20)       NOT NULL DEFAULT '0' COMMENT '注册IP',
+    `reg_ip`          varchar(20)      NOT NULL DEFAULT '' COMMENT '注册IP',
     `last_login_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后登录时间',
     `last_login_ip`   bigint(20)       NOT NULL DEFAULT '0' COMMENT '最后登录IP',
     `update_time`     int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新时间',

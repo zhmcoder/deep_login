@@ -8,6 +8,7 @@ Route::group([
 ], function (Router $router) {
     $router->get('WxWeb/callback', 'WxWebController@callback')->name('wxweb.callback');
     $router->get('WxWeb/default_login', 'WxWebController@default_login')->name('wxweb.default_login');
+    $router->get('WxQrcode/qrcode', 'WxQrcodeController@qrcode')->name('WxQrcode.qrcode');
 });
 
 Route::group([

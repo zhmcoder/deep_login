@@ -49,21 +49,20 @@ return [
     'wx21e205bfb5ccdefd' => [
         'app_secret' => '',
         'app_id' => 'wx21e205bfb5ccdefd',
-        // 'snsapi_base', 'snsapi_userinfo' 公众平台网页授权获取用户信息
-        // 'snsapi_login' 开放平台网页登录
-        'scopes' => ['snsapi_base', 'snsapi_userinfo', 'snsapi_login'],
-        'callback' => '/oauth_callback',
     ],
     //公众号登录信息
     'wxc7550ea08bdfd55c' => [
-        'app_id' => 'id：wxc7550ea08bdfd55c',
+        'app_id' => 'wxc7550ea08bdfd55c',
         'secret' => '',
         'token' => '',
         'aes_key' => '',
         'response_type' => 'array',
         'default_login' => [
-            'scopes' => ['snsapi_base'],
-            'callback' => '/Api/Weixin/default_login',
-        ]
+            'scopes' => ['snsapi_userinfo'],
+            'callback' => '/Api/WxWeb/default_login',
+        ],
+        'qrcode' => [
+            'scene' => 'login',
+        ],
     ],
 ];
