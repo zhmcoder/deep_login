@@ -29,7 +29,7 @@ class SmsService implements ISmsService
         if ($expired) {
             return true;
         } else {
-            if (in_array($mobile, config('deep_login.ignore_mobile'))) {
+            if (in_array($mobile, config('deep_login.ignore_mobile')) || env('SMS_DEV')) {
                 $codeInfo['status'] = 200;
                 $codeInfo['sms_code'] = config('deep_login.default_sms_code');
             } else {
