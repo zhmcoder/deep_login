@@ -2,6 +2,7 @@
 
 namespace Andruby\Login\Controllers;
 
+use Andruby\Login\Services\Interfaces\IUserService;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 
@@ -41,6 +42,38 @@ class WxQrcodeController extends BaseController
         } else {
             $this->responseJson(self::STATUS_FAILED, 'fail', $result);
         }
+    }
+
+    public function default_login(Request $request)
+    {
+        $app_id = $request->input('app_id');
+        $code = $request->input('code');
+        debug_log_info('app_id = ' . $app_id);
+        debug_log_info('code = ' . $code);
+
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
+        $oauth = $app->oauth;
+
+        $user = $oauth->userFromCode($code);
+        debug_log_info('user = ' . json_encode($user));
+        $user = $user->toArray();
+
+        $userService = config('deep_login.user_service');
+        $userService = new $userService;
+        debug_log_info('user open id = ' . $user['id']);
+        if (empty($user['id'])) {
+            $user['id'] = $user['token_response']['openid'];
+        }
+        $token_response = $user['token_response'];
+        $user_id = $userService->register($user['id'], $user['nickname'], $user['avatar'],
+            null, null, IUserService::USER_TYPE_WX_WEB, $token_response['access_token'], $token_response['refresh_token'],
+            $token_response['expires_in'], $token_response['scope']);
+
+        $data = [
+            'token' => $userService->genToken($user_id),
+            'openid' => $user['id'],
+        ];
+        $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
     }
 }
 
