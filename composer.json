@@ -21,7 +21,7 @@
         "alibabacloud/sdk": "^1.8",
         "andruby/tokens-auth": "^0.1.1",
         "w7corp/easywechat": "^5.22",
-        "overtrue/wechat": "~5.0"
+        "overtrue/wechat": "~5.22"
     },
     "require-dev": {
         "orchestra/testbench": "^5",
