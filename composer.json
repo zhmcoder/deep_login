@@ -19,7 +19,7 @@
         "illuminate/database": "~5|~6|~7|~8",
         "illuminate/auth": "~5|~6|~7|~8",
         "alibabacloud/sdk": "^1.8",
-        "andruby/tokens-auth": "^0.1",
+        "andruby/tokens-auth": "^0.1.1",
         "w7corp/easywechat": "^5.22",
         "overtrue/wechat": "~5.0"
     },
