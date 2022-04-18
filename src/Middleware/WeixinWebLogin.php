@@ -41,7 +41,7 @@ class WeixinWebLogin
             if ($is_api) {
                 $data['code'] = 200;
                 $data['message'] = 'success';
-                $data['redirectUrl'] = $redirectUrl;
+                $data['redirectUrl'] = $redirectUrl->getTargetUrl();
                 return response($data);
             } else {
                 return \redirect($redirectUrl);
