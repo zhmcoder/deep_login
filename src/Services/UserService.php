@@ -24,7 +24,7 @@ class UserService implements IUserService
                              $access_token = null, $refresh_token = null,
                              $expires_in = null, $scope = null)
     {
-        $user_info = UcenterMember::where('username', $openid)->first();
+        $user_info = UcenterMember::where('username', $unionid)->first();
 
         if (empty($user_info)) {
             $user_id = UcenterMember::wx_register($openid, $unionid, $user_type,

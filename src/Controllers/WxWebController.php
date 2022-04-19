@@ -3,6 +3,7 @@
 namespace Andruby\Login\Controllers;
 
 use Andruby\Login\Services\Interfaces\IUserService;
+use EasyWeChat\MiniProgram\PhoneNumber\Client;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 
@@ -44,7 +45,7 @@ class WxWebController extends BaseController
         }
         $token_response = $user['token_response'];
         $user_id = $userService->register($user['id'], $user['nickname'], $user['avatar'],
-            null, null, IUserService::USER_TYPE_WX_WEB, $token_response['access_token'], $token_response['refresh_token'],
+            $user['unionid'], null, IUserService::USER_TYPE_WX_WEB, $token_response['access_token'], $token_response['refresh_token'],
             $token_response['expires_in'], $token_response['scope']);
         $target_url = strpos($target_url, '?') > 0 ? ($target_url . '&openid=' . $user['id'])
             : ($target_url . '?openid=' . $user['id']);
