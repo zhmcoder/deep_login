@@ -38,10 +38,12 @@ class WeixinWebLogin
             $redirectUrl = $oauth->redirect(route('wxweb.default_login', ['app_id' => $app_id, 'target_url' => $target_url]));
 
             debug_log_info('redirectUrl = ' . $redirectUrl);
+            debug_log_info('targetUrl = ' . $target_url);
+
             if ($is_api) {
                 $data['code'] = 200;
                 $data['message'] = 'success';
-                $data['redirectUrl'] = $redirectUrl->getTargetUrl();
+                $data['redirectUrl'] = $redirectUrl;
                 return response($data);
             } else {
                 return \redirect($redirectUrl);
