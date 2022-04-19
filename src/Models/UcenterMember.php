@@ -134,7 +134,7 @@ class UcenterMember extends Authenticatable
     public static function wx_register($openid, $unionid, $user_type = 1, $access_token = null,
                                        $refresh_token = null, $expires_in = null, $scope = null)
     {
-        $data['username'] = $openid;
+        $data['username'] = $unionid;
         $data['password'] = $data['username'] . 'wrqwre';
         $data['email'] = $data['username'] . '@163.com';
         $data['access_token'] = $access_token;
