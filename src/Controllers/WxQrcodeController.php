@@ -5,6 +5,7 @@ namespace Andruby\Login\Controllers;
 use Andruby\Login\Services\Interfaces\IUserService;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
+use EasyWeChat\OfficialAccount\Application;
 
 /**
  * 微信公众号扫码相关登录
@@ -13,6 +14,25 @@ use EasyWeChat\Factory;
  */
 class WxQrcodeController extends BaseController
 {
+    public function callback(Request $request)
+    {
+        $app_id = $request->input('app_id');
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
+
+        $app->server->push(function ($message) {
+            switch ($message['MsgType']) {
+                case 'event':
+                    if ($message['Event'] == 'subscribe') {
+                        return '关注';
+                    } else if ($message['Event'] == 'unsubscribe') {
+                        return '取消关注';
+                    }
+            }
+        });
+
+        return $app->server->serve();
+    }
+
     public function qrcode(Request $request)
     {
         $app_id = $request->input('app_id');
