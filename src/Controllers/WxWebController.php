@@ -44,7 +44,7 @@ class WxWebController extends BaseController
             $user['id'] = $user['token_response']['openid'];
         }
         $token_response = $user['token_response'];
-        $unionid = $token_response['unionid'] ?: $user['id'];
+        $unionid = !empty($token_response['unionid']) ? $token_response['unionid'] : $user['id'];
         $user_id = $userService->register($user['id'], $user['nickname'], $user['avatar'],
             $unionid, null, IUserService::USER_TYPE_WX_WEB, $token_response['access_token'], $token_response['refresh_token'],
             $token_response['expires_in'], $token_response['scope']);
