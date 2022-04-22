@@ -36,4 +36,8 @@ interface IUserService
                              $refresh_token = null, $expires_in = null,
                              $scope = null);
 
+    public function userInfoByToken($token);
+
+    public function updateOpenid($userId, $openId);
+
 }

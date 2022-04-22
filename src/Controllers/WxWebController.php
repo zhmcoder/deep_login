@@ -3,7 +3,6 @@
 namespace Andruby\Login\Controllers;
 
 use Andruby\Login\Services\Interfaces\IUserService;
-use EasyWeChat\MiniProgram\PhoneNumber\Client;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
 
@@ -91,6 +90,7 @@ class WxWebController extends BaseController
         }
 
         $userInfo = $userService->userInfoByToken($user_token);
+        debug_log_info('userInfo = ' . json_encode($userInfo));
         $userService->updateOpenid($userInfo['id'], $user['id']);
 
         debug_log_info('target_url = ' . $target_url);
