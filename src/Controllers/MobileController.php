@@ -3,6 +3,7 @@
 namespace Andruby\Login\Controllers;
 
 use Andruby\Login\Validates\MobileValidate;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 
 /**
@@ -72,6 +73,58 @@ class MobileController extends BaseController
         } else {
             return $this->responseJson('-1', $validate->message);
         }
+    }
+
+    // 手机号登录 & 微信静默授权
+    public function wx_login(Request $request, MobileValidate $validate)
+    {
+        $validate_result = $validate->verify_code($request->only(['mobile', 'verify_code']));
+        if ($validate_result) {
+            $mobile = $request->input('mobile');
+            $verify_code = $request->input('verify_code');
+            $target_url = $request->input('target_url', url()->full()); // 重定向地址
+            $app_id = $request->input('app_id');
+            $config = config('deep_login.' . $app_id);
+
+            $smsService = config('deep_login.sms_service');
+            $smsService = new $smsService;
+            if ($smsService->verifyCode($mobile, $verify_code)) {
+
+                $userService = config('deep_login.user_service');
+                $userService = new $userService;
+
+                $userId = $userService->mobile($mobile);
+                if ($userId) {
+                    $userInfo = $userService->userInfo($userId);
+
+                    if ($app_id && $config && $config['wx_login']) {
+                        $config['oauth'] = $config['wx_login'];
+                        $app = Factory::officialAccount($config);
+                        $oauth = $app->oauth;
+                        $redirectUrl = $oauth->redirect(route('wxweb.wx_login', ['app_id' => $app_id, 'target_url' => $target_url, 'user_token' => $userInfo['token']]));
+                        debug_log_info('redirectUrl = ' . $redirectUrl);
+                        $userInfo['redirectUrl'] = $redirectUrl;
+                    }
+
+                    $this->responseJson('0', '登录成功', $userInfo);
+                } else {
+                    $this->responseJson('-1', '登录成功失败');
+                }
+            } else {
+                $this->responseJson('-1', '验证码失效');
+            }
+        } else {
+            $this->responseJson('-1', $validate->message);
+        }
+    }
+
+    public function callback(Request $request)
+    {
+        $app_id = $request->input('app_id');
+        debug_log_info('mobile callback app_id = ' . $app_id);
+
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
+        return $app->server->serve();
     }
 }
 

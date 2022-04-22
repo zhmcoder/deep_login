@@ -61,6 +61,10 @@ return [
             'scopes' => ['snsapi_userinfo'],
             'callback' => '/Api/WxWeb/default_login',
         ],
+        'wx_login' => [
+            'scopes' => ['snsapi_base'],
+            'callback' => '/Api/Mobile/callback',
+        ],
         'qrcode' => [
             'scene' => 'login',
         ],

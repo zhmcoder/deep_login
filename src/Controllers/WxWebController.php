@@ -62,5 +62,34 @@ class WxWebController extends BaseController
         $data['token'] = $token;
         $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
     }
+
+    // 微信静默授权
+    public function wx_login(Request $request)
+    {
+        $target_url = $request->input('target_url');
+        $app_id = $request->input('app_id');
+        $code = $request->input('code');
+
+        debug_log_info('target_url = ' . $target_url);
+        debug_log_info('app_id = ' . $app_id);
+        debug_log_info('code = ' . $code);
+
+        $app = Factory::officialAccount(config('deep_login.' . $app_id));
+        $oauth = $app->oauth;
+
+        $user = $oauth->userFromCode($code);
+        debug_log_info('user = ' . json_encode($user));
+        $user = $user->toArray();
+
+        $userService = config('deep_login.user_service');
+        $userService = new $userService;
+        debug_log_info('user open id = ' . $user['id']);
+        if (empty($user['id'])) {
+            $user['id'] = $user['token_response']['openid'];
+        }
+
+        debug_log_info('target_url = ' . $target_url);
+        header('Location:' . $target_url);
+    }
 }
 

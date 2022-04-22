@@ -6,8 +6,10 @@ Route::group([
     'prefix' => 'Api',
     'namespace' => 'Andruby\\Login\\Controllers',
 ], function (Router $router) {
+    // 微信授权登录
     $router->get('WxWeb/callback', 'WxWebController@callback')->name('wxweb.callback');
     $router->get('WxWeb/default_login', 'WxWebController@default_login')->name('wxweb.default_login');
+    //
     $router->get('WxQrcode/qrcode', 'WxQrcodeController@qrcode')->name('WxQrcode.qrcode');
     $router->get('WxQrcode/default_login', 'WxQrcodeController@default_login')->name('WxQrcode.default_login');
 });
@@ -19,6 +21,10 @@ Route::group([
     //手机号登录
     $router->post('Mobile/verify_code', 'MobileController@verify_code')->name('mobile.verify_code');
     $router->post('Mobile/login', 'MobileController@login')->name('mobile.login');
+    // 手机号登录 & 微信静默授权
+    $router->post('Mobile/wx_login', 'MobileController@wx_login')->name('mobile.wx_login');
+    $router->get('WxWeb/wx_login', 'WxWebController@wx_login')->name('wxweb.wx_login');
+    $router->get('Mobile/callback', 'MobileController@callback')->name('mobile.callback');
     //小程序登录
     $router->post('WxMini/login', 'WxMiniController@login')->name('wx_mini.login');
 });
