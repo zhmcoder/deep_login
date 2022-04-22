@@ -83,7 +83,7 @@ class MobileController extends BaseController
             $mobile = $request->input('mobile');
             $verify_code = $request->input('verify_code');
             $target_url = $request->input('target_url', url()->full()); // 重定向地址
-            $app_id = $request->input('app_id');
+            $app_id = $request->input('appid');
             $config = config('deep_login.' . $app_id);
 
             $smsService = config('deep_login.sms_service');
