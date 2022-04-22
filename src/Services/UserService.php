@@ -2,6 +2,7 @@
 
 namespace Andruby\Login\Services;
 
+use Andruby\ApiToken\ApiToken;
 use Andruby\Login\Models\Member;
 use Andruby\Login\Models\UcenterMember;
 use Andruby\Login\Services\Interfaces\IUserService;
@@ -140,5 +141,18 @@ class UserService implements IUserService
         return $userData;
     }
 
+    public function userInfoByToken($token)
+    {
+        $token_info = ApiToken::where('api_token', $token)->with('user')->first();
+        if ($token_info && $token_info['user']) {
+            return $token_info['user'];
+        }
+        return null;
+    }
+
+    public function updateOpenid($userId, $openId)
+    {
+        return UcenterMember::query()->where(['id' => $userId])->update(['openid' => $openId]);
+    }
 
 }

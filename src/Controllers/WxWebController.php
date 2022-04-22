@@ -69,10 +69,12 @@ class WxWebController extends BaseController
         $target_url = $request->input('target_url');
         $app_id = $request->input('app_id');
         $code = $request->input('code');
+        $user_token = $request->input('user_token');
 
         debug_log_info('target_url = ' . $target_url);
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);
+        debug_log_info('user_token = ' . $user_token);
 
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $oauth = $app->oauth;
@@ -87,6 +89,9 @@ class WxWebController extends BaseController
         if (empty($user['id'])) {
             $user['id'] = $user['token_response']['openid'];
         }
+
+        $userInfo = $userService->userInfoByToken($user_token);
+        $userService->updateOpenid($userInfo['id'], $user['id']);
 
         debug_log_info('target_url = ' . $target_url);
         header('Location:' . $target_url);
