@@ -97,7 +97,8 @@ class MobileController extends BaseController
                 if ($userId) {
                     $userInfo = $userService->userInfo($userId);
 
-                    if ($app_id && $config && $config['wx_login']) {
+                    $userInfo['redirectUrl'] = '';
+                    if ($app_id && $config && $config['wx_login'] && empty($userInfo['openid'])) {
                         $config['oauth'] = $config['wx_login'];
                         $app = Factory::officialAccount($config);
                         $oauth = $app->oauth;
