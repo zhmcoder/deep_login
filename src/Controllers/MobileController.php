@@ -38,10 +38,9 @@ class MobileController extends BaseController
                     $msg = '图片验证码验证失败';
                 }
             }
-            return $this->responseJson($verify_code ? '0' : '-1', $msg);
-
+            $this->responseJson($verify_code ? self::CODE_SUCCESS_CODE : self::CODE_SHOW_MSG, $msg);
         } else {
-            return $this->responseJson('-1', $validate->message);
+            $this->responseJson(self::CODE_ERROR_CODE, $validate->message);
         }
     }
 
@@ -61,17 +60,15 @@ class MobileController extends BaseController
                 $userId = $userService->mobile($mobile);
                 if ($userId) {
                     $userInfo = $userService->userInfo($userId);
-                    return $this->responseJson('0', '登录成功', $userInfo);
+                    $this->responseJson(self::CODE_SUCCESS_CODE, '登录成功', $userInfo);
                 } else {
-                    return $this->responseJson('-1', '登录成功失败');
+                    $this->responseJson(self::CODE_SHOW_MSG, '登录失败');
                 }
-
-
             } else {
-                return $this->responseJson('-1', '验证码失效');
+                $this->responseJson(self::CODE_SHOW_MSG, '验证码失效');
             }
         } else {
-            return $this->responseJson('-1', $validate->message);
+            $this->responseJson(self::CODE_ERROR_CODE, $validate->message);
         }
     }
 
@@ -106,15 +103,15 @@ class MobileController extends BaseController
                         $userInfo['redirectUrl'] = $redirectUrl;
                     }
 
-                    $this->responseJson('0', '登录成功', $userInfo);
+                    $this->responseJson(self::CODE_SUCCESS_CODE, '登录成功', $userInfo);
                 } else {
-                    $this->responseJson('-1', '登录成功失败');
+                    $this->responseJson(self::CODE_SHOW_MSG, '登录失败');
                 }
             } else {
-                $this->responseJson('-1', '验证码失效');
+                $this->responseJson(self::CODE_SHOW_MSG, '验证码失效');
             }
         } else {
-            $this->responseJson('-1', $validate->message);
+            $this->responseJson(self::CODE_ERROR_CODE, $validate->message);
         }
     }
 
