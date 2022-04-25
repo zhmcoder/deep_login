@@ -59,7 +59,7 @@ class WxWebController extends BaseController
         $token = $request->input('token', null);
 
         $data['token'] = $token;
-        $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
+        $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
     }
 
     // 微信静默授权

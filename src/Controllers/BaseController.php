@@ -6,17 +6,12 @@ use App\Http\Controllers\Controller;
 
 class BaseController extends Controller
 {
-    /**
-     * 成功code码
-     */
-    const STATUS_SUCCESS = 200;
+    const CODE_SHOW_MSG = 2001; // 弹窗提示
+    const CODE_ERROR_CODE = -1; // 失败code码
+    const CODE_SUCCESS_CODE = 200; // 成功code码
+    const CODE_TOKEN = 400; // token 过期, 需要重新登录
 
-    /**
-     * 失败code码
-     */
-    const STATUS_FAILED = -1;
-
-    protected function responseJson($code = self::STATUS_SUCCESS, $message = null, $data = null)
+    protected function responseJson($code = self::CODE_SUCCESS_CODE, $message = null, $data = null)
     {
         $response["code"] = $code;
         $response["message"] = $message;

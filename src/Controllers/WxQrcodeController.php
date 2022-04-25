@@ -58,9 +58,9 @@ class WxQrcodeController extends BaseController
             file_put_contents($qrcodeUrl, $content);
 
             $data['qrcode_url'] = http_path('qrcode/' . $filename);
-            $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
+            $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
         } else {
-            $this->responseJson(self::STATUS_FAILED, 'fail', $result);
+            $this->responseJson(self::CODE_ERROR_CODE, 'fail', $result);
         }
     }
 
@@ -93,7 +93,7 @@ class WxQrcodeController extends BaseController
             'token' => $userService->genToken($user_id),
             'openid' => $user['id'],
         ];
-        $this->responseJson(self::STATUS_SUCCESS, 'success', $data);
+        $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
     }
 }
 
