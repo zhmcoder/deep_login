@@ -159,7 +159,7 @@ class UserService implements IUserService
     {
         $where = [
             'username' => $email,
-            'password' => bcrypt($password),
+            'password' => $password,
         ];
         $user_info = UcenterMember::query()->where($where)->first();
 
