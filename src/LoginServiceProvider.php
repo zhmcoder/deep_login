@@ -3,6 +3,7 @@
 namespace Andruby\Login;
 
 use Andruby\Login\Console\InstallCommand;
+use Andruby\Login\Middleware\ImgCode;
 use Andruby\Login\Middleware\WeixinWebLogin;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,7 +11,8 @@ class LoginServiceProvider extends ServiceProvider
 {
 
     protected $routeMiddleware = [
-        'login.weixin.web' => WeixinWebLogin::class
+        'login.weixin.web' => WeixinWebLogin::class,
+        'imgCode' => ImgCode::class
     ];
 
     protected $commands = [
