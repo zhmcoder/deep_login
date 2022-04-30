@@ -10,7 +10,7 @@ interface ISmsService
 
     public function sendVerifyCode($mobile);
 
-    public function genImgCode($mobile);
+    public function getImgCode($mobile);
 
     public function verifyCode($mobile, $verify_code);
 

@@ -71,4 +71,19 @@ class  MobileValidate extends Validate
         ];
         return $this->validate($request_data, $rules, $message);
     }
+
+    public function email($request_data)
+    {
+        $rules = [
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ];
+        $message = [
+            'email.required' => '账号不能为空',
+            'email.string' => '账号格式不正确',
+            'password.required' => '密码不能为空',
+            'password.string' => '密码格式不正确'
+        ];
+        return $this->validate($request_data, $rules, $message);
+    }
 }

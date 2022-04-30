@@ -155,4 +155,15 @@ class UserService implements IUserService
         return UcenterMember::query()->where(['id' => $userId])->update(['openid' => $openId]);
     }
 
+    public function email($email, $password)
+    {
+        $where = [
+            'username' => $email,
+            'password' => bcrypt($password),
+        ];
+        $user_info = UcenterMember::query()->where($where)->first();
+
+        return $user_info ? $user_info['id'] : 0;
+    }
+
 }

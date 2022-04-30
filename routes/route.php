@@ -27,6 +27,8 @@ Route::group([
     $router->get('Mobile/callback', 'MobileController@callback')->name('mobile.callback');
     //小程序登录
     $router->post('WxMini/login', 'WxMiniController@login')->name('wx_mini.login');
+    // 图形验证码
+    $router->get('img/get_img_code', 'EmailController@get_img_code')->middleware('imgCode')->name('img.get_img_code');
 });
 
 Route::group([

@@ -24,7 +24,7 @@ class MobileController extends BaseController
             $msg = '验证码已发送！';
             if (empty($img_code)) {
                 if ($smsService->isImgCode($mobile)) {
-                    $data['img_code'] = $smsService->genImgCode($mobile);
+                    $data['img_code'] = $smsService->getImgCode($mobile);
                     $verify_code = true;
                     $msg = '图片验证码已发送！';
                 } else {

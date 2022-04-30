@@ -2,6 +2,7 @@
 
 namespace Andruby\Login\Services;
 
+use Andruby\Login\Libs\Verify\ImgCode;
 use Andruby\Login\Models\VerifyCode;
 use Andruby\Login\Services\Interfaces\ISmsService;
 
@@ -69,9 +70,10 @@ class SmsService implements ISmsService
         return $check_result;
     }
 
-    public function genImgCode($mobile)
+    public function getImgCode($username)
     {
-        // TODO: Implement genImgCode() method.
+        $id = md5(config('deep_login.aes_key') . $username);
+        ImgCode::get_img_code($id);
     }
 
     public function isImgCode($mobile)
