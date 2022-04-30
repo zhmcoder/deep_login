@@ -2,7 +2,6 @@
 
 namespace Andruby\Login\Controllers;
 
-use Andruby\Login\Libs\Verify\ImgCode;
 use Andruby\Login\Validates\MobileValidate;
 use Illuminate\Http\Request;
 
@@ -40,15 +39,13 @@ class EmailController extends BaseController
 
     }
 
-    public function get_img_code(Request $request)
+    public function get_img_code($id)
     {
-        $username = $request->input('username');
-
-        if ($username) {
+        if ($id) {
             $smsService = config('deep_login.sms_service');
             $smsService = new $smsService;
 
-            $smsService->getImgCode($username);
+            $smsService->getImgCode($id);
         } else {
             $this->responseJson('-1', '参数错误');
         }

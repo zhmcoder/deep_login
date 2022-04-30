@@ -3,6 +3,7 @@
 namespace Andruby\Login\Services;
 
 use Andruby\Login\Libs\Verify\ImgCode;
+use Andruby\Login\Libs\Verify\Verify;
 use Andruby\Login\Models\VerifyCode;
 use Andruby\Login\Services\Interfaces\ISmsService;
 
@@ -18,7 +19,6 @@ class SmsService implements ISmsService
     {
         return new self();
     }
-
 
     public function sendVerifyCode($mobile, $app_id = 'default_app_id', $client_ip = null)
     {
@@ -83,6 +83,7 @@ class SmsService implements ISmsService
 
     public function verifyImgCode($mobile, $img_code)
     {
-        // TODO: Implement verifyImgCode() method.
+        $Verify = new Verify();
+        return $Verify->check($img_code, $mobile);
     }
 }

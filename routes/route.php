@@ -28,7 +28,9 @@ Route::group([
     //小程序登录
     $router->post('WxMini/login', 'WxMiniController@login')->name('wx_mini.login');
     // 图形验证码
-    $router->get('img/get_img_code', 'EmailController@get_img_code')->middleware('imgCode')->name('img.get_img_code');
+    $router->get('img/get_img_code/{id}', 'EmailController@get_img_code')->middleware('imgCode')->name('img.get_img_code');
+    // 邮箱登录
+    $router->post('Email/login', 'EmailController@login')->name('email.login');
 });
 
 Route::group([

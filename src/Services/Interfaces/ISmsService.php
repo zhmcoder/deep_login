@@ -1,16 +1,12 @@
 <?php
 
-
 namespace Andruby\Login\Services\Interfaces;
-
 
 interface ISmsService
 {
-
-
     public function sendVerifyCode($mobile);
 
-    public function getImgCode($mobile);
+    public function getImgCode($username);
 
     public function verifyCode($mobile, $verify_code);
 
