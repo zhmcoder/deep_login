@@ -69,6 +69,9 @@ class UserService implements IUserService
         if ($userInfo) {
             $userInfo = $userInfo->toArray();
             $userInfo['token'] = $this->genToken($user_id);
+
+            $userInfo['head_pic'] = http_path($userInfo['head_pic']);
+            $userInfo['head_pic_small'] = http_path($userInfo['head_pic_small']);
         }
         return $userInfo;
     }
