@@ -2,6 +2,7 @@
 
 namespace Andruby\Login\Controllers;
 
+use Andruby\Login\Models\Member;
 use Andruby\Login\Validates\MobileValidate;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
@@ -81,6 +82,7 @@ class MobileController extends BaseController
             $verify_code = $request->input('verify_code');
             $target_url = $request->input('target_url', url()->full()); // 重定向地址
             $app_id = $request->input('appid');
+            $source = $request->input('source');
             $config = config('deep_login.' . $app_id);
 
             $smsService = config('deep_login.sms_service');
@@ -95,7 +97,7 @@ class MobileController extends BaseController
                     $userInfo = $userService->userInfo($userId);
 
                     $userInfo['redirectUrl'] = '';
-                    if ($app_id && $config && $config['wx_login'] && empty($userInfo['openid'])) {
+                    if ($app_id && $config && $config['wx_login'] && empty($userInfo['openid']) && $source == Member::SOURCE_WX) {
                         $config['oauth'] = $config['wx_login'];
                         $app = Factory::officialAccount($config);
                         $oauth = $app->oauth;

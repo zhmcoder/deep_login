@@ -100,6 +100,10 @@ class Member extends Model
         'country', 'language'
     ];
 
+    const SOURCE_WX = 1;
+    const SOURCE_H5 = 2;
+    const SOURCE_PC = 3;
+
     /**
      * The attributes that should be hidden for arrays.
      *
