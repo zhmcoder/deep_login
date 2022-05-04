@@ -166,7 +166,18 @@ class UserService implements IUserService
         ];
         $user_info = UcenterMember::query()->where($where)->first();
 
-        return $user_info ? $user_info['id'] : 0;
+        if (!empty($user_info)) {
+            // 登录统计
+            $data = array(
+                'last_login_time' => time(),
+                'last_login_ip' => get_client_ip(1),
+            );
+            Member::query()->where('uid', $user_info['id'])->update($data);
+
+            return $user_info['id'];
+        } else {
+            return 0;
+        }
     }
 
 }
