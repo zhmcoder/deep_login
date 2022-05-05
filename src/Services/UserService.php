@@ -45,14 +45,15 @@ class UserService implements IUserService
         $user_info = UcenterMember::where('username', $mobile)->first();
         if (empty($user_info)) {
             $user_id = UcenterMember::mobile_register($mobile);
-            if (!Member::mobile_register($user_id,
-                $this->defaultNickname($user_id))) {
+            if (!Member::mobile_register($user_id, $this->defaultNickname($user_id))) {
                 UcenterMember::where('id', $user_id)->delete();
                 return 0;
             }
         } else {
             $user_id = $user_info['id'];
         }
+
+        $this->login_time($user_id);
         return $user_id;
     }
 
@@ -167,17 +168,22 @@ class UserService implements IUserService
         $user_info = UcenterMember::query()->where($where)->first();
 
         if (!empty($user_info)) {
-            // 登录统计
-            $data = array(
-                'last_login_time' => time(),
-                'last_login_ip' => get_client_ip(1),
-            );
-            Member::query()->where('uid', $user_info['id'])->update($data);
+            $this->login_time($user_info['id']);
 
             return $user_info['id'];
         } else {
             return 0;
         }
+    }
+
+    public function login_time($userId)
+    {
+        // 登录统计
+        $data = array(
+            'last_login_time' => time(),
+            'last_login_ip' => get_client_ip(1),
+        );
+        Member::query()->where('uid', $userId)->update($data);
     }
 
 }
