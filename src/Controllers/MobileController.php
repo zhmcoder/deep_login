@@ -81,7 +81,7 @@ class MobileController extends BaseController
             $mobile = $request->input('mobile');
             $verify_code = $request->input('verify_code');
             $target_url = $request->input('target_url', url()->full()); // 重定向地址
-            $app_id = $request->input('appid');
+            $app_id = env('APP_ID') ?? $request->input('app_id');
             $source = $request->input('source');
             $config = config('deep_login.' . $app_id);
 
@@ -120,7 +120,7 @@ class MobileController extends BaseController
 
     public function callback(Request $request)
     {
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         debug_log_info('mobile callback app_id = ' . $app_id);
 
         $app = Factory::officialAccount(config('deep_login.' . $app_id));

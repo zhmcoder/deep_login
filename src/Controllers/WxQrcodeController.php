@@ -16,7 +16,7 @@ class WxQrcodeController extends BaseController
 {
     public function callback(Request $request)
     {
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
 
         $app->server->push(function ($message) {
@@ -35,7 +35,7 @@ class WxQrcodeController extends BaseController
 
     public function qrcode(Request $request)
     {
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
 
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $qrcode = $app->qrcode;
@@ -66,7 +66,7 @@ class WxQrcodeController extends BaseController
 
     public function default_login(Request $request)
     {
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $code = $request->input('code');
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);

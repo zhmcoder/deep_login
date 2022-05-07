@@ -15,7 +15,7 @@ class WxWebController extends BaseController
 {
     public function callback(Request $request)
     {
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         return $app->server->serve();
     }
@@ -23,7 +23,7 @@ class WxWebController extends BaseController
     public function default_login(Request $request)
     {
         $target_url = $request->input('target_url');
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $code = $request->input('code');
         debug_log_info('target_url = ' . $target_url);
         debug_log_info('app_id = ' . $app_id);
@@ -66,7 +66,7 @@ class WxWebController extends BaseController
     public function wx_login(Request $request)
     {
         $target_url = $request->input('target_url');
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $code = $request->input('code');
         $user_token = $request->input('user_token');
 

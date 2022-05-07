@@ -23,7 +23,7 @@ class WeixinWebLogin
             return $next($request);
         }
 
-        $app_id = $request->input('app_id');
+        $app_id = env('APP_ID') ?? $request->input('app_id');
         $config = config('deep_login.' . $app_id);
 
         if ($app_id && $config) {
