@@ -23,9 +23,10 @@ class MobileController extends BaseController
             $smsService = config('deep_login.sms_service');
             $smsService = new $smsService;
             $msg = '验证码已发送！';
+            $data = [];
             if (empty($img_code)) {
                 if ($smsService->isImgCode($mobile)) {
-                    $data['img_code'] = $smsService->getImgCode($mobile);
+                    $data['img_code'] = route('img.get_img_code', ['img_id' => md5(config('deep_login.aes_key') . $mobile)]);
                     $verify_code = true;
                     $msg = '图片验证码已发送！';
                 } else {
@@ -39,7 +40,7 @@ class MobileController extends BaseController
                     $msg = '图片验证码验证失败';
                 }
             }
-            $this->responseJson($verify_code ? self::CODE_SUCCESS_CODE : self::CODE_SHOW_MSG, $msg);
+            $this->responseJson($verify_code ? self::CODE_SUCCESS_CODE : self::CODE_SHOW_MSG, $msg, $data);
         } else {
             $this->responseJson(self::CODE_ERROR_CODE, $validate->message);
         }
