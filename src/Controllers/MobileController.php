@@ -33,7 +33,7 @@ class MobileController extends BaseController
                     $verify_code = $smsService->sendVerifyCode($mobile);
                 }
             } else {
-                if ($smsService->verifyImgCode(md5(config('deep_login.aes_key') . $mobile), $img_code)) {
+                if ($smsService->verifyImgCode($mobile, $img_code)) {
                     $verify_code = $smsService->sendVerifyCode($mobile);
                 } else {
                     $verify_code = false;
