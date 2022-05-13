@@ -70,9 +70,9 @@ class SmsService implements ISmsService
         return $check_result;
     }
 
-    public function getImgCode($username)
+    public function getImgCode($id)
     {
-        $id = md5(config('deep_login.aes_key') . $username);
+        // $id = md5(config('deep_login.aes_key') . $username);
         ImgCode::get_img_code($id);
     }
 
@@ -81,9 +81,11 @@ class SmsService implements ISmsService
         return false;
     }
 
-    public function verifyImgCode($mobile, $img_code)
+    public function verifyImgCode($id, $img_code)
     {
+        $id = md5(config('deep_login.aes_key') . $id);
+
         $Verify = new Verify();
-        return $Verify->check($img_code, $mobile);
+        return $Verify->check($img_code, $id);
     }
 }
