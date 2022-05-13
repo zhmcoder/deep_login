@@ -26,7 +26,7 @@ class MobileController extends BaseController
             $data = [];
             if (empty($img_code)) {
                 if ($smsService->isImgCode($mobile)) {
-                    $data['img_code'] = route('img.get_img_code', ['img_id' => md5(config('deep_login.aes_key') . $mobile)]);
+                    $data['img_code'] = route('img.get_img_code', [md5(config('deep_login.aes_key') . $mobile)]);
                     $verify_code = true;
                     $msg = '图片验证码已发送！';
                 } else {
