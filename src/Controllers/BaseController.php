@@ -18,6 +18,12 @@ class BaseController extends Controller
         if (!empty($data)) {
             $response["data"] = $data;
         }
+
+        $result = " url: " . request()->getUri();
+        $result .= " params: " . json_encode(request()->except(['api_sign']));
+        $result .= " result: " . json_encode($response);
+        deep_login_info($result);
+
         header('Content-Type:application/json; charset=utf-8');
         exit(json_encode($response));
     }
