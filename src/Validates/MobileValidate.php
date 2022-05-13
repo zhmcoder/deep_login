@@ -25,7 +25,7 @@ class  MobileValidate extends Validate
     {
         $rules = [
             'mobile' => 'required|regex:/^1[3456789][0-9]{9}$/',
-            'img_code' => 'sometimes|required|digits:4',
+            'img_code' => 'sometimes|required|size:4',
         ];
         $message = [
             'mobile.required' => '手机号不能为空',
