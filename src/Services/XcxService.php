@@ -7,11 +7,11 @@ use Cache;
 
 class XcxService
 {
-    public static function getXcxSession($appid, $appsecret, $code)
+    public static function getXcxSession($appid, $appSecret, $code)
     {
         $url = "https://api.weixin.qq.com/sns/jscode2session?appid="
             . $appid
-            . "&secret=" . $appsecret
+            . "&secret=" . $appSecret
             . "&js_code=" . $code
             . "&grant_type=authorization_code";
         $data = file_get_contents($url);
@@ -32,8 +32,6 @@ class XcxService
         } else {
             return null;
         }
-
-
     }
 
     public static function cache_session($appid, $openid, $session, $expired_in = 0)
@@ -56,9 +54,9 @@ class XcxService
         $session_key = self::getSession($appid, $openid);
         if ($session_key) {
             $dataCrypt = new WXBizDataCrypt($appid, $session_key);
-            $dataCrypt->decryptData($data, $iv, $data_info);
-            debug_log_info('login data info = ' . $data_info);
-            return json_decode($data_info, true);
+            $dataCrypt->decryptData($data, $iv, $loginData);
+            debug_log_info('loginData info = ' . $loginData);
+            return json_decode($loginData, true);
         } else {
             $data['code'] = 1001;
             $data['message'] = '小程序需要重新登录';
