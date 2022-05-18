@@ -19,6 +19,7 @@ class XcxService
         $data = json_decode($data, true);
         if (array_key_exists('errcode', $data)) {
             $data = file_get_contents($url);
+            debug_log_info('wx xcx session = ' . $data);
             $data = json_decode($data, true);
         }
 
@@ -26,6 +27,7 @@ class XcxService
             return false;
         }
 
+        debug_log_info('wx xcx session_key = ' . $data['session_key']);
         if ($data['session_key']) {
             self::cache_session($appid, $data['openid'], $data['session_key']);
             return $data;
@@ -52,9 +54,11 @@ class XcxService
     public static function decryptData($appid, $openid, $data, $iv)
     {
         $session_key = self::getSession($appid, $openid);
+        debug_log_info('appid = ' . $appid . ', openid = ' . $openid . ', session_key = ' . $session_key);
         if ($session_key) {
             $dataCrypt = new WXBizDataCrypt($appid, $session_key);
-            $dataCrypt->decryptData($data, $iv, $loginData);
+            $res = $dataCrypt->decryptData($data, $iv, $loginData);
+            debug_log_info('decryptData res = ' . json_encode($res));
             debug_log_info('loginData info = ' . $loginData);
             return json_decode($loginData, true);
         } else {
