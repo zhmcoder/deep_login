@@ -46,9 +46,10 @@ class WxMiniController extends BaseController
                 $this->responseJson('1001', '需要登录');
             }
             $userInfo['openId'] = $wxSession['openid'];
+            $userInfo['unionid'] = $wxSession['unionid'];
 
             $userService = config('deep_login.user_service');
-            $userService = new UserService();
+            // $userService = new UserService();
             $userInfo = $userService->dealWxInfo($userInfo);
 
             $user_id = $userService->register($userInfo['openId'], $userInfo['nickname'],
@@ -57,7 +58,7 @@ class WxMiniController extends BaseController
                 null, null);
 
             $data = $userService->userInfo($user_id);
-            $data['token'] = $userService->genToken($user_id);
+            // $data['token'] = $userService->genToken($user_id);
             $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
 
         } else {
