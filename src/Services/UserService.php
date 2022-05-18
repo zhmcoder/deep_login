@@ -82,7 +82,7 @@ class UserService implements IUserService
         return config('deep_login.nickname_pre') . mt_rand(10, 99) . $user_id . mt_rand(10, 99);
     }
 
-    public function dealWxInfo($wxInfo)
+    public function dealWxInfo($wxInfo): array
     {
         if (array_key_exists('nickname', $wxInfo)) {
             $userData['nickname'] = $wxInfo['nickname'];
