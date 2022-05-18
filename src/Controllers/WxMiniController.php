@@ -49,7 +49,7 @@ class WxMiniController extends BaseController
             $userInfo['unionid'] = $wxSession['unionid'];
 
             $userService = config('deep_login.user_service');
-            // $userService = new UserService();
+            $userService = new $userService;
             $userInfo = $userService->dealWxInfo($userInfo);
 
             $user_id = $userService->register($userInfo['openId'], $userInfo['nickname'],
