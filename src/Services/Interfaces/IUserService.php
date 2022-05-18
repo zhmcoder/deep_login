@@ -40,4 +40,5 @@ interface IUserService
 
     public function updateOpenid($userId, $openId);
 
+    public function dealWxInfo($wxInfo);
 }
