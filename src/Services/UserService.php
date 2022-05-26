@@ -6,6 +6,7 @@ use Andruby\ApiToken\ApiToken;
 use Andruby\Login\Models\Member;
 use Andruby\Login\Models\UcenterMember;
 use Andruby\Login\Services\Interfaces\IUserService;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @method static UserService instance()
@@ -163,14 +164,16 @@ class UserService implements IUserService
     {
         $where = [
             'username' => $email,
-            'password' => bcrypt($password),
+            // 'password' => bcrypt($password),
         ];
         $user_info = UcenterMember::query()->where($where)->first();
-
-        if (!empty($user_info)) {
-            $this->login_time($user_info['id']);
-
-            return $user_info['id'];
+        if (Hash::check($password, $user_info['password'])) {
+            if (!empty($user_info)) {
+                $this->login_time($user_info['id']);
+                return $user_info['id'];
+            } else {
+                return 0;
+            }
         } else {
             return 0;
         }
