@@ -167,13 +167,9 @@ class UserService implements IUserService
             // 'password' => bcrypt($password),
         ];
         $user_info = UcenterMember::query()->where($where)->first();
-        if (Hash::check($password, $user_info['password'])) {
-            if (!empty($user_info)) {
-                $this->login_time($user_info['id']);
-                return $user_info['id'];
-            } else {
-                return 0;
-            }
+        if (!empty($user_info) && Hash::check($password, $user_info['password'])) {
+            $this->login_time($user_info['id']);
+            return $user_info['id'];
         } else {
             return 0;
         }
