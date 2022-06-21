@@ -155,10 +155,12 @@ class Member extends Model
     public static function mobile_register($user_id, $nickName)
     {
 
-        $data = array('nickname' => $nickName, 'status' => 1,
+        $data = array(
+            'nickname' => $nickName, 'status' => 1,
             'head_pic' => config('deep_login.default_head_url'),
             'head_pic_small' => config('deep_login.default_head_url'),
-            'uid' => $user_id
+            'uid' => $user_id,
+            'app_id' => request('app_id'),
         );
 
         try {

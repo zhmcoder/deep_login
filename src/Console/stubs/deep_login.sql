@@ -76,6 +76,7 @@ CREATE TABLE `members`
     `idfa`            varchar(128)         DEFAULT NULL,
     `idfv`            varchar(128)         DEFAULT NULL,
     `appid`           varchar(128)         DEFAULT NULL,
+    `app_id`          varchar(1024)        DEFAULT NULL,
     `channel`         varchar(256)         DEFAULT NULL,
     `os_type`         varchar(256)         DEFAULT NULL,
     `deleted_at`      timestamp   NULL     DEFAULT NULL,
