@@ -126,6 +126,7 @@ class UcenterMember extends Authenticatable
         $data['reg_ip'] = '122';
         $data['status'] = '1';
         $data['user_type'] = '0';
+        $data['app_id'] = request('app_id');
 
         $data = UcenterMember::create($data);
         return $data['id'];
