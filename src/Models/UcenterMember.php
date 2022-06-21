@@ -66,7 +66,7 @@ class UcenterMember extends Authenticatable
     protected $fillable = [
         'username', 'email', 'password', 'mobile', 'phone',
         'reg_ip', 'last_login_time', 'last_login_ip', 'status', 'user_type',
-        'unionid', 'access_token', 'expires_in', 'refresh_token', 'scope'
+        'unionid', 'access_token', 'expires_in', 'refresh_token', 'scope', 'app_id',
     ];
 
     /**

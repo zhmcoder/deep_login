@@ -97,7 +97,7 @@ class Member extends Model
         'uid', 'nickname', 'sex', 'head_pic', 'head_pic_small', 'head_pic_src',
         'birthday', 'qq', 'score', 'login', 'last_login_ip', 'last_login_time', 'status',
         'notify', 'pushPlatform', 'clientid', 'deviceToken', 'alias', 'city', 'province',
-        'country', 'language'
+        'country', 'language', 'app_id',
     ];
 
     const SOURCE_WX = 1;
