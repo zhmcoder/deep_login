@@ -16,24 +16,26 @@ class MiTangSms implements ISmsSend
 {
     function sendSMSCode($mobile, $app_id = 'default_app_id')
     {
-        $template_id = config('deep_login.netease_sms.template_id');
-        if (key_exists($app_id, $template_id)) {
-            $template_id = config('deep_login.netease_sms.template_id')[$app_id];
-            $sms_code = mt_rand(1001, 9999);
-            return $this->send_sms($mobile, $sms_code);
+        $sign_id = config('deep_login.mi_tang_sms.sign_id');
+        if (key_exists($app_id, $sign_id)) {
+            $smsSignId = config('deep_login.mi_tang_sms.sign_id')[$app_id];
+            $smsTemplateNo = config('deep_login.mi_tang_sms.template_no')[$app_id];
+
+            $verifyCode = mt_rand(1001, 9999);
+            return $this->send_sms($mobile, $verifyCode, $smsSignId, $smsTemplateNo);
         } else {
             return false;
         }
     }
 
-    public function send_sms($mobile, $sms_code)
+    public function send_sms($mobile, $verifyCode, $smsSignId, $smsTemplateNo)
     {
-        $appcode = "d050293973c644c6a0734f22598d8048"; //
+        $appcode = config('deep_login.mi_tang_sms.appcode'); //
         $url = "https://miitangs09.market.alicloudapi.com/v1/tools/sms/code/sender";
         $param['phoneNumber'] = $mobile;
-        $param['smsSignId'] = 'QM426241';//签名模板
-        $param['smsTemplateNo'] = '0003';//短信模板id
-        $param['verifyCode'] = $sms_code;//短信验证码
+        $param['smsSignId'] = $smsSignId;//签名模板
+        $param['smsTemplateNo'] = $smsTemplateNo;//短信模板id
+        $param['verifyCode'] = $verifyCode;//短信验证码
 
         $header[] = "Authorization:APPCODE " . $appcode;
         $header[] = 'X-Ca-Nonce:' . $this->create_uuid();
@@ -43,10 +45,21 @@ class MiTangSms implements ISmsSend
         $header = HttpUtil::getResponseHeader();
 
         debug_log_info('MiTang send sms header = ' . json_encode($header) . ', mobile = ' . $mobile);
-
         debug_log_info('MiTang send sms result = ' . json_encode($result) . ', mobile = ' . $mobile);
 
-        return $result;
+        $result = json_decode($result, true);
+        if ($result['code'] && $result['code'] == 'FP00000') {
+            return [
+                'status' => 200,
+                'sms_code' => $result['verificationCode'],
+            ];
+        } else {
+            error_log_info('MiTang send sms  error = ' . json_encode($result) . ', mobile = ' . $mobile);
+            return [
+                'status' => -1,
+                'sms_code' => '',
+            ];
+        }
     }
 
     private function create_uuid($prefix = "")

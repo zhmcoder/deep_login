@@ -44,6 +44,17 @@ return [
             'default_app_id' => ''
         ]
     ],
+
+    'mi_tang_sms' => [
+        'appcode' => '',
+        'sign_id' => [
+            'default_app_id' => '',
+        ],
+        'template_no' => [
+            'default_app_id' => '',
+        ],
+    ],
+
     //小程序登录配置
     'wx_mini_app_id_default' => '',
     'wx21e205bfb5ccdefd' => [
