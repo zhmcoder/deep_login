@@ -23,7 +23,7 @@ class MiTangSms implements ISmsSend
         if (key_exists($app_id, $template_id)) {
             $template_id = config('deep_login.netease_sms.template_id')[$app_id];
             $sms_code = mt_rand(1001, 9999);
-            return NeteaseApi::send_sms($mobile, $template_id, $sms_code);
+            return $this->send_sms();
         } else {
             return false;
         }
