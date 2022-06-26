@@ -22,6 +22,7 @@ class MobileController extends BaseController
             $img_code = $request->input('img_code');
             $smsService = config('deep_login.sms_service');
             $smsService = new $smsService;
+            $smsAppId = env('SMS_APP_ID', 'default_app_id');
             $msg = '验证码已发送！';
             $data = [];
             if (empty($img_code)) {
@@ -30,11 +31,11 @@ class MobileController extends BaseController
                     $verify_code = true;
                     $msg = '图片验证码已发送！';
                 } else {
-                    $verify_code = $smsService->sendVerifyCode($mobile);
+                    $verify_code = $smsService->sendVerifyCode($mobile, $smsAppId);
                 }
             } else {
                 if ($smsService->verifyImgCode($mobile, $img_code)) {
-                    $verify_code = $smsService->sendVerifyCode($mobile);
+                    $verify_code = $smsService->sendVerifyCode($mobile, $smsAppId);
                 } else {
                     $verify_code = false;
                     $msg = '图片验证码验证失败';

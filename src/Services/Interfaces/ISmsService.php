@@ -4,7 +4,7 @@ namespace Andruby\Login\Services\Interfaces;
 
 interface ISmsService
 {
-    public function sendVerifyCode($mobile);
+    public function sendVerifyCode($mobile, $smsAppId);
 
     public function getImgCode($username);
 

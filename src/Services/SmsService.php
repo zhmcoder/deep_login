@@ -20,7 +20,7 @@ class SmsService implements ISmsService
         return new self();
     }
 
-    public function sendVerifyCode($mobile, $app_id = 'default_app_id', $client_ip = null)
+    public function sendVerifyCode($mobile, $smsAppId = 'default_app_id', $client_ip = null)
     {
         $smsRecord = VerifyCode::where('mobile', $mobile)
             ->where('created_at', '>=', strtotime(date('Y-m-d')))
@@ -36,7 +36,7 @@ class SmsService implements ISmsService
             } else {
                 $smsSend = config('deep_login.sms_send');
                 $smsSend = new $smsSend;
-                $codeInfo = $smsSend->sendSMSCode($mobile, $app_id);
+                $codeInfo = $smsSend->sendSMSCode($mobile, $smsAppId);
             }
 
             if ($codeInfo['status'] == 200) {

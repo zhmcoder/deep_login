@@ -2,7 +2,6 @@
 
 namespace Andruby\Login\Libs\Sms;
 
-
 /**
  * Created by PhpStorm.
  * User: zhm
@@ -13,7 +12,6 @@ namespace Andruby\Login\Libs\Sms;
  */
 class AliSms implements ISmsSend
 {
-
     function sendSMSCode($mobile, $app_id = 'default_app_id')
     {
         $sign_name = config('deep_login.ali_sms.sign_name');
@@ -25,6 +23,5 @@ class AliSms implements ISmsSend
         } else {
             return false;
         }
-
     }
 }

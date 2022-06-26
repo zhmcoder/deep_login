@@ -2,9 +2,7 @@
 
 namespace Andruby\Login\Libs\Sms;
 
-
 use Andruby\Login\Libs\Utils\HttpUtil;
-use http\Client;
 
 /**
  * Created by PhpStorm.
@@ -16,37 +14,41 @@ use http\Client;
  */
 class MiTangSms implements ISmsSend
 {
-    
     function sendSMSCode($mobile, $app_id = 'default_app_id')
     {
         $template_id = config('deep_login.netease_sms.template_id');
         if (key_exists($app_id, $template_id)) {
             $template_id = config('deep_login.netease_sms.template_id')[$app_id];
             $sms_code = mt_rand(1001, 9999);
-            return $this->send_sms();
+            return $this->send_sms($mobile, $sms_code);
         } else {
             return false;
         }
     }
 
-    public  function send_sms(){
+    public function send_sms($mobile, $sms_code)
+    {
         $appcode = "d050293973c644c6a0734f22598d8048"; //
         $url = "https://miitangs09.market.alicloudapi.com/v1/tools/sms/code/sender";
-        $param['phoneNumber'] = '19801300563';
+        $param['phoneNumber'] = $mobile;
         $param['smsSignId'] = 'QM426241';//签名模板
         $param['smsTemplateNo'] = '0003';//短信模板id
-        $param['verifyCode'] = '1234';//短信验证码
+        $param['verifyCode'] = $sms_code;//短信验证码
 
         $header[] = "Authorization:APPCODE " . $appcode;
         $header[] = 'X-Ca-Nonce:' . $this->create_uuid();
         $header[] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8';
-        
-        $result = HttpUtil::httpPost($url,$param,$header);
+
+        $result = HttpUtil::httpPost($url, $param, $header);
         $header = HttpUtil::getResponseHeader();
-        print_r('qq');
-        print_r($header);
+
+        debug_log_info('MiTang send sms header = ' . json_encode($header) . ', mobile = ' . $mobile);
+
+        debug_log_info('MiTang send sms result = ' . json_encode($result) . ', mobile = ' . $mobile);
+
         return $result;
     }
+
     private function create_uuid($prefix = "")
     {
         $chars = md5(uniqid(mt_rand(), true));
