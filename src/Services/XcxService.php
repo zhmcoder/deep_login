@@ -63,7 +63,7 @@ class XcxService
             return json_decode($loginData, true);
         } else {
             $data['code'] = 1001;
-            $data['message'] = '小程序需要重新登录';
+            $data['msg'] = '小程序需要重新登录';
             return $data;
         }
     }

@@ -14,7 +14,7 @@ class BaseController extends Controller
     protected function responseJson($code = self::CODE_SUCCESS_CODE, $message = null, $data = null)
     {
         $response["code"] = $code;
-        $response["message"] = $message;
+        $response["msg"] = $message;
         if (!empty($data)) {
             $response["data"] = $data;
         }

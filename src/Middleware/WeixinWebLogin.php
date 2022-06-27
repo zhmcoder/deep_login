@@ -42,7 +42,7 @@ class WeixinWebLogin
 
             if ($is_api) {
                 $data['code'] = 200;
-                $data['message'] = 'success';
+                $data['msg'] = 'success';
                 $data['redirectUrl'] = $redirectUrl;
                 return response($data);
             } else {
@@ -52,7 +52,7 @@ class WeixinWebLogin
             }
         } else {
             $data['code'] = -1;
-            $data['message'] = 'app_id is null';
+            $data['msg'] = 'app_id is null';
             return response($data);
         }
     }
