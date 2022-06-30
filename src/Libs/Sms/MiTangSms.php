@@ -51,7 +51,7 @@ class MiTangSms implements ISmsSend
         if ($result['code'] && $result['code'] == 'FP00000') {
             return [
                 'status' => 200,
-                'sms_code' => $result['verificationCode'],
+                'sms_code' => $result['verifyCode'],
             ];
         } else {
             error_log_info('MiTang send sms  error = ' . json_encode($result) . ', mobile = ' . $mobile);
