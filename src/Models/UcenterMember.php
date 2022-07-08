@@ -142,6 +142,7 @@ class UcenterMember extends Authenticatable
         $data['refresh_token'] = $refresh_token;
         $data['expires_in'] = $expires_in;
         $data['unionid'] = $unionid;
+        $data['openid'] = $openid;
         $data['scope'] = $scope;
 
         $data['reg_ip'] = request()->getClientIp();
