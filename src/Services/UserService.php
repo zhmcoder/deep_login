@@ -88,21 +88,21 @@ class UserService implements IUserService
         if (array_key_exists('nickname', $wxInfo)) {
             $userData['nickname'] = $wxInfo['nickname'];
         } else {
-            $userData['nickname'] = $wxInfo['nickName'];
+            $userData['nickname'] = $wxInfo['nickName'] ?? '';
         }
 
         if (array_key_exists('headimgurl', $wxInfo)) {
             $userData['avatar_small'] = $wxInfo['headimgurl'];
-            $userData['avatar'] = $wxInfo['headimgurl'];
+            $userData['avatar'] = $wxInfo['headimgurl'] ?? '';
         } else {
             $userData['avatar_small'] = $wxInfo['avatarUrl'];
-            $userData['avatar'] = $wxInfo['avatarUrl'];
+            $userData['avatar'] = $wxInfo['avatarUrl'] ?? '';
         }
 
         if (array_key_exists('sex', $wxInfo)) {
             $userData['sex'] = $wxInfo['sex'];
         } else {
-            $userData['sex'] = $wxInfo['gender'];
+            $userData['sex'] = $wxInfo['gender'] ?? '';
         }
 
         if (array_key_exists('language', $wxInfo)) {
