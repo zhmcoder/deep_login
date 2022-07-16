@@ -16,4 +16,15 @@ class WxMiniValidate extends Validate
         ];
         return $this->validate($request_data, $rules, $message);
     }
+
+    public function wx_login($request_data)
+    {
+        $rules = [
+            'code' => 'required',
+        ];
+        $message = [
+            'code.required' => '小程序标识不能为空',
+        ];
+        return $this->validate($request_data, $rules, $message);
+    }
 }

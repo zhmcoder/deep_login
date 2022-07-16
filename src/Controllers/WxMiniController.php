@@ -3,7 +3,6 @@
 namespace Andruby\Login\Controllers;
 
 use Andruby\Login\Services\Interfaces\IUserService;
-use Andruby\Login\Services\UserService;
 use Andruby\Login\Services\XcxService;
 use Andruby\Login\Validates\WxMiniValidate;
 use Illuminate\Http\Request;
@@ -45,6 +44,42 @@ class WxMiniController extends BaseController
             if (empty($userInfo) || (key_exists('status', $userInfo) && $userInfo['status'] == '1001')) {
                 $this->responseJson('1001', '需要登录');
             }
+            $userInfo['openId'] = $wxSession['openid'];
+            $userInfo['unionid'] = $wxSession['unionid'] ?: $wxSession['openid'];
+
+            $userService = config('deep_login.user_service');
+            $userService = new $userService;
+            $userInfo = $userService->dealWxInfo($userInfo);
+
+            $user_id = $userService->register($userInfo['openId'], $userInfo['nickname'],
+                $userInfo['avatar'], $userInfo['unionid'], null,
+                IUserService::USER_TYPE_WX_MINI, null,
+                null, null);
+
+            $data = $userService->userInfo($user_id);
+            // $data['token'] = $userService->genToken($user_id);
+            $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
+
+        } else {
+            $this->responseJson(self::CODE_ERROR_CODE, $validate->message);
+        }
+    }
+
+
+    public function wx_login(Request $request, WxMiniValidate $validate)
+    {
+        $validate_result = $validate->wx_login($request->only(['code']));
+        if ($validate_result) {
+            $code = $request->input('code');
+
+            $mini_app_id = $request->input('mini_app_id', config('deep_login.wx_mini_app_id_default'));
+            $wxSession = XcxService::getXcxSession($mini_app_id, config('deep_login.' . $mini_app_id . '.app_secret'), $code);
+            if (!$wxSession) {
+                $this->responseJson(self::CODE_ERROR_CODE, "微信授权失败,请重新授权。");
+            }
+
+            debug_log_info('wxSession = ' . json_encode($wxSession));
+
             $userInfo['openId'] = $wxSession['openid'];
             $userInfo['unionid'] = $wxSession['unionid'] ?: $wxSession['openid'];
 
