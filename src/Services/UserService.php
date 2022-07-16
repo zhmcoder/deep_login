@@ -93,9 +93,9 @@ class UserService implements IUserService
 
         if (array_key_exists('headimgurl', $wxInfo)) {
             $userData['avatar_small'] = $wxInfo['headimgurl'];
-            $userData['avatar'] = $wxInfo['headimgurl'] ?? '';
+            $userData['avatar'] = $wxInfo['headimgurl'];
         } else {
-            $userData['avatar_small'] = $wxInfo['avatarUrl'];
+            $userData['avatar_small'] = $wxInfo['avatarUrl'] ?? '';
             $userData['avatar'] = $wxInfo['avatarUrl'] ?? '';
         }
 
