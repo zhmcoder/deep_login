@@ -82,7 +82,7 @@ class MobileController extends BaseController
         if ($validate_result) {
             $mobile = $request->input('mobile');
             $verify_code = $request->input('verify_code');
-            $target_url = env('SAAS_LOGIN') ? env('SAAS_TARGET_URL') . url()->full() : $request->input('target_url', url()->full()); // 重定向地址
+            $target_url = env('SAAS_LOGIN') ? env('SAAS_TARGET_URL') : $request->input('target_url', url()->full()); // 重定向地址
             $app_id = env('APP_ID') ?? $request->input('app_id');
             $source = $request->input('source');
             $config = config('deep_login.' . $app_id);
