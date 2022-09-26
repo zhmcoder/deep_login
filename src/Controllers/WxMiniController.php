@@ -45,7 +45,7 @@ class WxMiniController extends BaseController
                 $this->responseJson('1001', '需要登录');
             }
             $userInfo['openId'] = $wxSession['openid'];
-            $userInfo['unionid'] = $wxSession['unionid'] ?: $wxSession['openid'];
+            $userInfo['unionid'] = !empty($wxSession['unionid']) ? $wxSession['unionid'] : $wxSession['openid'];
 
             $userService = config('deep_login.user_service');
             $userService = new $userService;
