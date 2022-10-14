@@ -26,6 +26,10 @@ class MobileController extends BaseController
             $msg = '验证码已发送！';
             $data = [];
             if (empty($img_code)) {
+                if (in_array($mobile, explode(',', env('MOBILE_BLACK_LIST', '')))) {
+                    $this->responseJson(self::CODE_ERROR_CODE, '获取验证码失败');
+                }
+
                 if ($smsService->isImgCode($mobile)) {
                     $data['img_code'] = route('img.get_img_code', [md5(config('deep_login.aes_key') . $mobile)]);
                     $verify_code = true;
