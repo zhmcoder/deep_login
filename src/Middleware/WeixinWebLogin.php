@@ -2,6 +2,7 @@
 
 namespace Andruby\Login\Middleware;
 
+use Andruby\ApiToken\ApiToken;
 use Closure;
 use Illuminate\Http\Request;
 use EasyWeChat\Factory;
@@ -19,7 +20,8 @@ class WeixinWebLogin
     {
         $token = request(config('deep_login.check_login_param'), null);
 
-        if ($token) {
+        $apiToken = ApiToken::query()->where(['token' => $token])->with('user')->has('user')->first();
+        if (!empty($token) && !empty($apiToken)) {
             return $next($request);
         }
 

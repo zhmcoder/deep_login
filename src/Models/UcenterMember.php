@@ -75,11 +75,11 @@ class UcenterMember extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'updated_at', 'created_at', 'mobile', 'phone'
+        'password', 'remember_token', 'updated_at', 'created_at'
     ];
 
 
-    protected $visible = ['id', 'username', 'token'];
+    protected $visible = ['id', 'username', 'token', 'mobile', 'phone', 'openid'];
 
     /**
      * The name of the "created at" column.
