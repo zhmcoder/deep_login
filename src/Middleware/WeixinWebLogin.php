@@ -20,7 +20,7 @@ class WeixinWebLogin
     {
         $token = request(config('deep_login.check_login_param'), null);
 
-        $apiToken = ApiToken::query()->where(['token' => $token])->with('user')->has('user')->first();
+        $apiToken = ApiToken::query()->where(['api_token' => $token])->with('user')->has('user')->first();
         if (!empty($token) && !empty($apiToken)) {
             return $next($request);
         }
