@@ -9,7 +9,7 @@ class UserOfficialAccount extends Model
     /**
      * @var string
      */
-    protected $table = 'user_official_account';
+    protected $table = 'user_official_accounts';
 
     /**
      * The attributes that are mass assignable.

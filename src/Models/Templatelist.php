@@ -5,7 +5,7 @@ namespace Andruby\Login\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Templatelist extends Model
+class TemplateList extends Model
 {
     // 软删除
     use SoftDeletes;
@@ -15,7 +15,7 @@ class Templatelist extends Model
      *
      * @var string
      */
-    protected $table = 'templatelist';
+    protected $table = 'template_lists';
     /**
      * 这个属性应该被转换为原生类型.
      *
@@ -24,13 +24,13 @@ class Templatelist extends Model
     protected $casts = [
     ];
 
-    protected $hidden =[
+    protected $hidden = [
         'created_at',
         'updated_at',
         'deleted_at',
     ];
 
     protected $fillable = [
-      'uuid', 'template_id', 'short_id', 'title', 'content'
+        'uuid', 'template_id', 'short_id', 'title', 'content'
     ];
 }

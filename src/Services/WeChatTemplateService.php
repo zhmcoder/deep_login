@@ -2,7 +2,7 @@
 
 namespace Andruby\Login\Services;
 
-use Andruby\Login\Models\Templatelist;
+use Andruby\Login\Models\TemplateList;
 use Andruby\Login\Models\UserOfficialAccount;
 use Andruby\Login\Models\WxAuthorization;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
@@ -31,7 +31,7 @@ class WeChatTemplateService
         if ($wxAuthorization->recharge_notice) {
             $toUser = UserOfficialAccount::where('user_id', $userId)->where('uuid', $wxAuthorization->uuid)->value('open_id');
 
-            $template_id = Templatelist::where('uuid', $wxAuthorization->uuid)->where('short_id', env('SMART_RECHARGE_NOTICE', 'OPENTM417049252'))->value('template_id');
+            $template_id = TemplateList::where('uuid', $wxAuthorization->uuid)->where('short_id', env('SMART_RECHARGE_NOTICE', 'OPENTM417049252'))->value('template_id');
 
             debug_log_info(__METHOD__ . " Send Template Msg {$template_id} To User {$toUser}....");
 
