@@ -49,9 +49,9 @@ class WXBizDataCrypt
 
         $result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
 
-        $dataObj = json_decode($result);
+        $dataObj = json_decode($result, true);
 
-        debug_log_info('decryptData info = ', $dataObj);
+        debug_log_info('decryptData info = ' . json_encode($dataObj));
 
         if ($dataObj == NULL) {
             return ErrorCode::$IllegalBuffer;
