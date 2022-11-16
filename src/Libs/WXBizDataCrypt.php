@@ -50,7 +50,13 @@ class WXBizDataCrypt
         $result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
 
         $dataObj = json_decode($result);
+
+        debug_log_info('decryptData info = ', $dataObj);
+
         if ($dataObj == NULL) {
+            return ErrorCode::$IllegalBuffer;
+        }
+        if (!isset($dataObj->watermark->appid)) {
             return ErrorCode::$IllegalBuffer;
         }
         if ($dataObj->watermark->appid != $this->appid) {
