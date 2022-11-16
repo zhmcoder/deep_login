@@ -57,6 +57,7 @@ class XcxService
         debug_log_info('appid = ' . $appid . ', openid = ' . $openid . ', session_key = ' . $session_key);
         if ($session_key) {
             $dataCrypt = new WXBizDataCrypt($appid, $session_key);
+            debug_log_info('decryptData = ' . json_encode($data));
             $res = $dataCrypt->decryptData($data, $iv, $loginData);
             debug_log_info('decryptData res = ' . json_encode($res));
             debug_log_info('loginData info = ' . $loginData);

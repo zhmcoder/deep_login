@@ -3,39 +3,26 @@
 namespace Andruby\Login\Services;
 
 use EasyWeChat\Factory;
-use Andruby\Login\Models\WxPlatform;
-use Illuminate\Support\Facades\Redis;
 use EasyWeChat\OpenPlatform\Application;
+use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 class WeChatPlatformService
 {
     /**
      * @param string $appId
-     * @return Application|null
+     * @return Application
      */
-    public static function platform(string $appId): ?Application
+    public static function platform(string $appId)
     {
-        static $pCache;
-        if (!empty($pCache[$appId])) {
-            return $pCache[$appId];
-        }
-
-        if (!$cfg = WxPlatform::where(['uuid' => $appId])->first()) {
-            error_log_info(__METHOD__, ['tips' => 'open platform not found.']);
-            return null;
-        }
-
-        $options = [
-            'app_id' => $cfg->uuid ?? '', 'secret' => $cfg->secret ?? '',
-            'token' => $cfg->verify_token ?? '', 'aes_key' => $cfg->verify_key ?? '',
-        ];
+        $options = config('deep_login.' . $appId);
 
         $platform = Factory::openPlatform($options);
+
         $platform->rebind('cache', new RedisAdapter(
-            Redis::connection()->client()
+            Redis::connection('wechat')->client()
         ));
 
-        return $pCache[$appId] = $platform;
+        return $platform;
     }
 }
