@@ -56,10 +56,10 @@ class WXBizDataCrypt
         if ($dataObj == NULL) {
             return ErrorCode::$IllegalBuffer;
         }
-        if (!isset($dataObj->watermark->appid)) {
+        if (!isset($dataObj['watermark']['appid'])) {
             return ErrorCode::$IllegalBuffer;
         }
-        if ($dataObj->watermark->appid != $this->appid) {
+        if ($dataObj['watermark']['appid'] != $this->appid) {
             return ErrorCode::$IllegalBuffer;
         }
         $data = $result;
