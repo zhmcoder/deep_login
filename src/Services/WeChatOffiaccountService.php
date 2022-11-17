@@ -357,7 +357,7 @@ class WeChatOffiaccountService
                     "nickname" => $user["nickname"] ?? "",
                     "uuid" => self::$wxAuthorization->uuid ?? "",
                     "unionid" => $user["unionid"] ?? "",
-                    'user_id' => self::getEventKey($message) ?? '',
+                    'user_id' => self::getEventKey($message) ?? 0,
                 ];
                 UserOfficialAccount::create($userOfficialAccountData);
             } else {
