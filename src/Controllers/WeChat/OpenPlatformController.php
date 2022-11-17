@@ -39,7 +39,7 @@ class OpenPlatformController extends BaseController
         }
     }
 
-    public function authorizee(Request $request, $appId = 0)
+    public function authorized(Request $request, $appId = 0)
     {
         $code = $request->input('auth_code', null);
         $view = view('wx.op.authorized');
