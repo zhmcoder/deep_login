@@ -16,6 +16,8 @@ Route::group([
     // 微信开放平台
     $router->post('Wechat/ticket', 'WeChat\OpenPlatformController@ticket');
     $router->post('Wechat/event/{appId}', 'WeChat\OpenPlatformController@event');
+
+    $router->get('Wechat/pre-authorized/{appId}', 'WeChat\OpenPlatformController@preAuthorizationJump');
     $router->get('Wechat/authorized/{appId}', 'WeChat\OpenPlatformController@authorized');
 });
 

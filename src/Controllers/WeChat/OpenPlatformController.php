@@ -3,6 +3,7 @@
 namespace Andruby\Login\Controllers\WeChat;
 
 use Andruby\Login\Controllers\BaseController;
+use Andruby\Login\Models\WxAuthorization;
 use Andruby\Login\Services\WeChatOffiaccountService;
 use Illuminate\Http\Request;
 use EasyWeChat\Kernel\Support\XML;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OpenPlatformController extends BaseController
 {
-    public function authorized($appId)
+    public function preAuthorizationJump($appId)
     {
         $dashUrl = rtrim(env('DASH_URL'), '/') . "/wxadmin/wxset";
         $view = view('wx.op.authorized')->with(['dash_url' => $dashUrl]);
@@ -36,6 +37,65 @@ class OpenPlatformController extends BaseController
                 'status' => false, 'title' => "[PA05] 微信开放平台配置有误", 'tips' => $e->getMessage()
             ]);
         }
+    }
+
+    public function authorizee(Request $request, $appId = 0)
+    {
+        $code = $request->input('auth_code', null);
+        $view = view('wx.op.authorized');
+        $dashUrl = rtrim(env('DASH_URL'), '/') . "/wxadmin/wxset";
+
+        if (!$appId || !$code) {
+            return $view->with([
+                'status' => false, 'title' => '[A01] 输入参数验证错误', 'dash_url' => $dashUrl
+            ]);
+        }
+
+        $openPlatform = WeChatPlatformService::platform($appId);
+        try {
+            $response = $openPlatform->handleAuthorize($code);
+        } catch (\Exception $e) {
+            return $view->with([
+                'status' => false, 'title' => "[A05] 授权错误", 'tips' => $e->getMessage(), 'dash_url' => $dashUrl
+            ]);
+        }
+
+        if (isset($response['errcode']) && $response['errcode'] != 0) {
+            return $view->with([
+                'status' => false, 'title' => "[A06] 授权错误", 'tips' => $response['errmsg'] ?? '', 'dash_url' => $dashUrl
+            ]);
+        }
+
+        $uuid = $response['authorization_info']['authorizer_appid'] ?? null;
+        try {
+            $mpInfo = $openPlatform->getAuthorizer($uuid);
+        } catch (\Exception $e) {
+            Log::warning(__METHOD__, ['error' => $e->getMessage()]);
+
+            return $view->with([
+                'status' => false, 'title' => "[A07] 授权错误", 'tips' => $e->getMessage()
+            ]);
+        }
+
+        $new = [
+            'functions' => $response['authorization_info']['func_info'] ?? null,
+            'authorized_info' => array_merge($response, $mpInfo),
+            'status' => 1,
+            'access_token' => $response['authorization_info']['authorizer_access_token'] ?? null,
+            'refresh_token' => $response['authorization_info']['authorizer_refresh_token'] ?? null,
+            'name' => $mpInfo['authorizer_info']['nick_name'] ?? null,
+            'logo' => $mpInfo['authorizer_info']['head_img'] ?? null,
+            'qrcode' => $mpInfo['authorizer_info']['qrcode_url'] ?? null,
+            'uuid' => $uuid,
+            'platform_id' => $wxPlatformCfg->id ?? 0
+        ];
+
+        WxAuthorization::query()->updateOrCreate(['uuid' => $uuid], $new);
+
+        $tips = '公众号';
+        return $view->with([
+            'status' => true, 'title' => '授权成功！', 'dash_url' => $dashUrl
+        ]);
     }
 
     /**
