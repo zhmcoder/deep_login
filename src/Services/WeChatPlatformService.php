@@ -4,6 +4,7 @@ namespace Andruby\Login\Services;
 
 use EasyWeChat\Factory;
 use EasyWeChat\OpenPlatform\Application;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
@@ -24,5 +25,40 @@ class WeChatPlatformService
         ));
 
         return $platform;
+    }
+
+    /**
+     * 授权通知
+     *
+     * @param array $message
+     * @return void
+     */
+    public static function authorized(array $message)
+    {
+        Log::info(__METHOD__, [$message]);
+    }
+
+    /**
+     * 授权更新通知
+     *
+     * @param array $message
+     * @return void
+     */
+    public static function updateAuthorized(array $message)
+    {
+        Log::info(__METHOD__, [$message]);
+    }
+
+    /**
+     * 取消授权通知
+     *
+     * @param array $message
+     * @return void
+     */
+    public static function unAuthorized(array $message)
+    {
+        $appId = $message['AuthorizerAppid'] ?? '_-_';
+        $status = WxAuthorization::where(['uuid' => $appId])->update(['status' => 0]);
+        Log::info(__METHOD__, [$appId, $status, $message]);
     }
 }

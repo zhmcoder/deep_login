@@ -3,7 +3,6 @@
 namespace Andruby\Login\Controllers\WeChat;
 
 use Andruby\Login\Controllers\BaseController;
-use Andruby\Login\Models\WxPlatform;
 use Andruby\Login\Services\WeChatOffiaccountService;
 use Illuminate\Http\Request;
 use EasyWeChat\Kernel\Support\XML;
@@ -22,19 +21,14 @@ class OpenPlatformController extends BaseController
 
         $openPlatform->getPreAuthorizationUrl('https://dev.c.me.ink/Api/sts/sd'); // 传入回调URI即可
 
-        print_r($openPlatform);
-        die;
         $preAuthorizationUrl = $openPlatform->getPreAuthorizationUrl(
             $redirectUrl, ['auth_type' => 1, 'biz_appid' => trim($appId)]
         );
-        echo $preAuthorizationUrl;
-        die;
+
         try {
             $preAuthorizationUrl = $openPlatform->getPreAuthorizationUrl(
                 $redirectUrl, ['auth_type' => 1, 'biz_appid' => trim($appId)]
             );
-            echo $preAuthorizationUrl;
-            die;
 
             redirect($preAuthorizationUrl);
         } catch (\Exception $e) {
@@ -72,7 +66,7 @@ class OpenPlatformController extends BaseController
 
             return $server->serve();
         } catch (\Exception $e) {
-            error_log_info(__METHOD__, $e->getMessage());
+            error_log_info(__METHOD__ . $e->getMessage());
         }
 
         $this->responseJson(self::CODE_SHOW_MSG, '失败');
