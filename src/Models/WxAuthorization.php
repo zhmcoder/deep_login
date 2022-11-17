@@ -3,11 +3,11 @@
 namespace Andruby\Login\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use traits\model\SoftDelete;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WxAuthorization extends Model
 {
-    use SoftDelete;
+    use SoftDeletes;
 
     /**
      * @var string
