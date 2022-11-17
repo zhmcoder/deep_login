@@ -29,7 +29,7 @@ class WxMiniController extends BaseController
 
             $wxSession = XcxService::getXcxSession($mini_app_id, config('deep_login.' . $mini_app_id . '.app_secret'), $code);
             if (!$wxSession) {
-                $this->responseJson(self::CODE_ERROR_CODE, "微信授权失败,请重新授权。");
+                $this->responseJson(self::CODE_ERROR_CODE, "授权失败,请重新进入小程序,授权登录");
             }
 
             if (key_exists('encryptedData', $loginData) && key_exists('iv', $loginData)) {
@@ -42,7 +42,7 @@ class WxMiniController extends BaseController
             debug_log_info('userInfo = ' . json_encode($userInfo));
 
             if (empty($userInfo) || (key_exists('status', $userInfo) && $userInfo['status'] == '1001')) {
-                $this->responseJson('1001', '需要登录');
+                $this->responseJson(self::CODE_ERROR_CODE, "授权失败,请重新进入小程序,授权登录");
             }
             $userInfo['openId'] = $wxSession['openid'];
             $userInfo['unionid'] = !empty($wxSession['unionid']) ? $wxSession['unionid'] : $wxSession['openid'];
