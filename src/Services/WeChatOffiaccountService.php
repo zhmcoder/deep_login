@@ -347,10 +347,6 @@ class WeChatOffiaccountService
                 Log::info(__METHOD__, ['message' => '用户数据不存在创建用户', 'adminId' => $adminId, 'user' => json_encode($user)]);
                 $userOfficialAccountData = [
                     "subscribe_time" => $data,
-                    "optimizer_id" => $adminId ?? "",
-                    "city" => $user["city"] ?? "",
-                    "province" => $user["province"] ?? "",
-                    "country" => $user["country"] ?? "",
                     "sex" => $user["sex"] ?? 0,//值为1时是男性，值为2时是女性，值为0时是未知
                     "operate_time" => $data,
                     "open_id" => $user["openid"] ?? "",
@@ -452,9 +448,9 @@ class WeChatOffiaccountService
         $eventKey = explode('_', $message["EventKey"]);
 
         if ($eventKey && count($eventKey) == 2 && $eventKey[0] == 'qrscene') {
-            return $eventKey[1] ?? "";
+            return $eventKey[1] ?? 0;
         }
 
-        return '';
+        return 0;
     }
 }
