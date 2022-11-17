@@ -16,23 +16,25 @@ class OpenPlatformController extends BaseController
 {
     public function authorized($appId)
     {
+        $dashUrl = rtrim(env('DASH_URL'), '/') . "/wxadmin/wxset";
+        $view = view('wx.op.authorized')->with(['dash_url' => $dashUrl]);
+
         $openPlatform = WeChatPlatformService::platform($appId);
-        $redirectUrl = join('/', [rtrim(config('app.url'), '/'), "wx/mp/authorized/"]);
 
-        $openPlatform->getPreAuthorizationUrl('https://dev.c.me.ink/Api/sts/sd'); // 传入回调URI即可
-
-        $preAuthorizationUrl = $openPlatform->getPreAuthorizationUrl(
-            $redirectUrl, ['auth_type' => 1, 'biz_appid' => trim($appId)]
-        );
+        $redirectUrl = join('/', [rtrim(config('app.url'), '/'), "Api/Wechat/authorized/{$appId}"]);
 
         try {
             $preAuthorizationUrl = $openPlatform->getPreAuthorizationUrl(
                 $redirectUrl, ['auth_type' => 1, 'biz_appid' => trim($appId)]
             );
 
-            redirect($preAuthorizationUrl);
+            return $view->with([
+                'status' => true, 'title' => '点击下方按钮完成授权', 'click' => $preAuthorizationUrl, 'op' => '授权'
+            ]);
         } catch (\Exception $e) {
-
+            return $view->with([
+                'status' => false, 'title' => "[PA05] 微信开放平台配置有误", 'tips' => $e->getMessage()
+            ]);
         }
     }
 
