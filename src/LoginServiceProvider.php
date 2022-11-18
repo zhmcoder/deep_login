@@ -29,6 +29,7 @@ class LoginServiceProvider extends ServiceProvider
         }
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/route.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'deep-login');
 
     }
 
@@ -40,7 +41,6 @@ class LoginServiceProvider extends ServiceProvider
 
         $this->commands($this->commands);
     }
-
 
     protected function registerRouteMiddleware()
     {

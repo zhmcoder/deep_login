@@ -5,23 +5,34 @@ namespace Andruby\Login\Controllers\WeChat;
 use Andruby\Login\Controllers\BaseController;
 use Andruby\Login\Models\WxAuthorization;
 use Andruby\Login\Services\WeChatOffiaccountService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use EasyWeChat\Kernel\Support\XML;
 use Illuminate\Support\Facades\Log;
 use Andruby\Login\Services\WeChatPlatformService;
 use EasyWeChat\OpenPlatform\Server\Guard;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class OpenPlatformController extends BaseController
 {
+    /**
+     * 微信开放平台授权页面
+     *
+     * @param $appId
+     * @return Application|Factory|View|\think\response\View
+     */
     public function preAuthorizationJump($appId)
     {
-        $dashUrl = rtrim(env('DASH_URL'), '/') . "/wxadmin/wxset";
+        // 跳转页面
+        $dashUrl = rtrim(env('DASH_URL'), '/');
         $view = view('wx.op.authorized')->with(['dash_url' => $dashUrl]);
 
         $openPlatform = WeChatPlatformService::platform($appId);
 
+        // 重定向地址
         $redirectUrl = join('/', [rtrim(config('app.url'), '/'), "Api/Wechat/authorized/{$appId}"]);
 
         try {
@@ -30,7 +41,7 @@ class OpenPlatformController extends BaseController
             );
 
             return $view->with([
-                'status' => true, 'title' => '点击下方按钮完成授权', 'click' => $preAuthorizationUrl, 'op' => '授权'
+                'status' => true, 'title' => '点击下方按钮完成授权', 'click' => $preAuthorizationUrl, 'op' => '公众号授权'
             ]);
         } catch (\Exception $e) {
             return $view->with([
@@ -39,11 +50,18 @@ class OpenPlatformController extends BaseController
         }
     }
 
+    /**
+     * 微信开放平台授权回调
+     *
+     * @param Request $request
+     * @param int $appId
+     * @return Application|Factory|View|\think\response\View
+     */
     public function authorized(Request $request, $appId = 0)
     {
         $code = $request->input('auth_code', null);
         $view = view('wx.op.authorized');
-        $dashUrl = rtrim(env('DASH_URL'), '/') . "/wxadmin/wxset";
+        $dashUrl = rtrim(env('DASH_URL'), '/');
 
         if (!$appId || !$code) {
             return $view->with([
@@ -92,13 +110,14 @@ class OpenPlatformController extends BaseController
 
         WxAuthorization::query()->updateOrCreate(['uuid' => $uuid], $new);
 
-        $tips = '公众号';
         return $view->with([
             'status' => true, 'title' => '授权成功！', 'dash_url' => $dashUrl
         ]);
     }
 
     /**
+     * 授权事件接收配置 ticket
+     *
      * @param Request $request
      * @return JsonResponse|Response
      */
@@ -107,11 +126,10 @@ class OpenPlatformController extends BaseController
         try {
             $content = $request->getContent();
             $payload = XML::parse($content);
-            Log::info(__METHOD__, [$content, $payload]);
+            debug_log_info(__METHOD__, [$content, $payload]);
 
             if (!$platform = WeChatPlatformService::platform($payload['AppId'] ?? '')) {
-                Log::warning(__METHOD__, ['tips' => 'open platform not found']);
-
+                error_log_info(__METHOD__, ['tips' => 'open platform not found']);
                 $this->responseJson(self::CODE_SHOW_MSG, 'open platform not found');
             }
 
@@ -134,7 +152,10 @@ class OpenPlatformController extends BaseController
         $this->responseJson(self::CODE_SHOW_MSG, '失败');
     }
 
+
     /**
+     * 公众号事件（关注、取关、消息）
+     *
      * @param Request $request
      * @param string $appId
      * @return string|Response
