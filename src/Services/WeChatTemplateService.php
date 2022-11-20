@@ -45,7 +45,7 @@ class WeChatTemplateService
                     //],
                     'client_msg_id' => md5($toUser . $userId),
                     'data' => [
-                        'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价~'],
+                        'first' => ['value' => '您好~'],
                         'keyword1' => ['value' => 'test'],
                         'keyword2' => ['value' => 300],
                         'remark' => ['value' => '👉 点击此消息继续精彩内容~'],
