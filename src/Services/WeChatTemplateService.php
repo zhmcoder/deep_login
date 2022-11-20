@@ -47,7 +47,7 @@ class WeChatTemplateService
                     'data' => [
                         'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价'],
                         'keyword1' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
-                        'keyword2' => ['value' => 15.75],
+                        'keyword2' => ['value' => sprintf('%.2f', 17.75)],
                         'remark' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
                     ]
                 ];
