@@ -245,10 +245,9 @@ class OpenPlatformController extends BaseController
         }
     }
 
-    public function sendTemplateMsg()
+    public function sendTemplateMsg($appId = '')
     {
         $userId = 3;
-        $appId = 'wx63212c9e065e414e';
 
         WeChatTemplateService::sendTemplateMsg($appId, $userId);
     }
