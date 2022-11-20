@@ -39,10 +39,10 @@ class WeChatTemplateService
                 $data = [
                     'touser' => $toUser,
                     'template_id' => $template_id,
-                    'miniprogram' => [
-                        'appid' => $appId,
-                        'pagepath' => 'pages/shop/shop', // 首页
-                    ],
+                    //'miniprogram' => [
+                    //    'appid' => $appId,
+                    //    'pagepath' => 'pages/shop/shop', // 首页
+                    //],
                     'client_msg_id' => md5($toUser . $userId),
                     'data' => [
                         'first' => ['value' => '恭喜您，充值成功，快去继续观看吧~'],
