@@ -39,10 +39,10 @@ class WeChatTemplateService
                 $data = [
                     'touser' => $toUser,
                     'template_id' => $template_id,
-                    //'miniprogram' => [
-                    //    'appid' => $appId,
-                    //    'pagepath' => 'pages/shop/shop', // 首页
-                    //],
+                    'miniprogram' => [
+                        'appid' => $appId,
+                        'pagepath' => 'pages/shop/shop', // 首页
+                    ],
                     'client_msg_id' => md5($toUser . $userId . time()),
                     'data' => [
                         'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价'],
