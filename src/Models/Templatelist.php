@@ -11,12 +11,6 @@ class TemplateList extends Model
     use SoftDeletes;
 
     /**
-     * 与模型关联的表名
-     *
-     * @var string
-     */
-    protected $table = 'template_lists';
-    /**
      * 这个属性应该被转换为原生类型.
      *
      * @var array

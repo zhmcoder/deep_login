@@ -3,8 +3,11 @@
 namespace Andruby\Login\Controllers\WeChat;
 
 use Andruby\Login\Controllers\BaseController;
+use Andruby\Login\Models\TemplateList;
 use Andruby\Login\Models\WxAuthorization;
 use Andruby\Login\Services\WeChatOffiaccountService;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -169,6 +172,72 @@ class OpenPlatformController extends BaseController
             return WeChatOffiaccountService::eventFormat($appId);
         } catch (\Exception $e) {
             error_log_info(__METHOD__, [$e->getMessage()]);
+        }
+    }
+
+    /**
+     * 公众号 - 推送开关
+     * @param Request $request
+     * @return JsonResponse
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function smartPushSwitch(Request $request)
+    {
+        try {
+            $switch = $request->input('switch', 1);
+            $type = $request->input('type', 1);
+            $wxAuth = WxAuthorization::where('status', 1)->first();
+
+            if ($wxAuth) {
+                switch ($type) {
+                    case 1: // 商品推送体系怀
+                        if ($switch) {
+                            $tmpShortId = env('SMART_RECHARGE_NOTICE', 'OPENTM417049252');
+                            $rechargeTemplate = TemplateList::query()->where('uuid', $wxAuth->uuid)->where('short_id', $tmpShortId)->first();
+                            if (!$rechargeTemplate) {
+                                $openPlatform = WeChatPlatformService::platform('');
+                                $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
+                                $res = $oa->template_message->addTemplate($tmpShortId);
+                                if (isset($res['errcode']) && $res['errcode'] != 0) {
+                                    $msg = $res['errmsg'] ?? '-';
+                                    return $this->error("开启充值成功提醒失败 ({$msg})");
+                                }
+                                debug_log_info('Open Template Msg  Resp：' . json_encode($res));
+
+                                $templateId = $res['template_id'] ?? '-';
+                                $res1 = $oa->template_message->getPrivateTemplates();
+                                if (isset($res1['errcode']) && $res1['errcode'] != 0) {
+                                    error_log_info('Get Template info fail! Resp：' . json_encode($res1));
+                                }
+                                $templatelist = array_column($res1['template_list'], null, 'template_id');
+                                $template = $templatelist[$templateId] ?? [];
+                                $map = ['uuid' => $wxAuth->uuid, 'short_id' => $tmpShortId];
+                                $new = [
+                                    'title' => $template['title'] ?? '',
+                                    'template_id' => $templateId,
+                                    'content' => $template['content'] ?? '',
+                                ];
+                                $res2 = TemplateList::updateOrCreate($map, $new);
+                                if (!$res2) {
+                                    error_log_info('insert Template info fail! ', compact('map', 'new'));
+                                }
+                            }
+                        }
+
+                        $resp = $wxAuth->update(['recharge_notice' => $switch]);
+                        if (!$resp) {
+                            return $this->error("操作失败");
+                        }
+                        break;
+                }
+
+                return $this->success();
+            } else {
+                return $this->error("未查询到授权公众号");
+            }
+        } catch (\Exception $e) {
+            error_log_info('Recharge Notice Switch Exception! Msg：' . $e->getMessage());
         }
     }
 }

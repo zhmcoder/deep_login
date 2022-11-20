@@ -87,7 +87,7 @@ class WeChatOffiaccountService
      */
     public static function eventCallBack($message, $adminId)
     {
-        Log::info('[ WeChat ] [ MP ] [ API ] Message: ' . json_encode($message));
+        debug_log_info('[ WeChat ] [ MP ] [ API ] Message: ' . json_encode($message));
         $replayData = null;
         $msgType = $message['MsgType'] ?? "";
         switch ($msgType) {
@@ -114,12 +114,11 @@ class WeChatOffiaccountService
                         break;
                     case "default":
                         //不处理的事件类型后期在考虑
-                        Log::info("关注回复异常: 不处理的事件类型后期在考虑:" . json_encode($message));
+                        debug_log_info("关注回复异常: 不处理的事件类型后期在考虑:" . json_encode($message));
                         return null;
                 }
                 break;
             case AppConstent::MESSAGE_TYPE_TEXT://收到文字消息
-//                $res = new Text('Hello world2!');
                 $replayData = self::eventText($message, $adminId);
                 break;
             case AppConstent::MESSAGE_TYPE_IMAGE://收到图片消息
@@ -161,7 +160,7 @@ class WeChatOffiaccountService
 
             $date = date("Y-m-d H:i:s");
             if (!$userOfficialAccount) {
-                Log::info(__METHOD__, ['message' => '用户数据不存在创建用户', 'adminId' => $adminId, 'user' => json_encode($user)]);
+                debug_log_info(__METHOD__, ['message' => '用户数据不存在创建用户', 'adminId' => $adminId, 'user' => json_encode($user)]);
                 $userOfficialAccountData = [
                     "subscribe_time" => $date,
                     "optimizer_id" => $adminId ?? "",
@@ -338,13 +337,13 @@ class WeChatOffiaccountService
     public static function eventSubscribe($message, $adminId)
     {
         try {
-            Log::info(__METHOD__, ['message' => json_encode($message), 'adminId' => $adminId]);
+            debug_log_info(__METHOD__, ['message' => json_encode($message), 'adminId' => $adminId]);
             //注册用户
             $user = self::$officialAccount->user->get($message["FromUserName"]);
             $userOfficialAccount = UserOfficialAccount::getUserInfo($message["FromUserName"], self::$wxAuthorization->uuid, $adminId);
             $data = date("Y-m-d H:i:s");
             if (!$userOfficialAccount) {
-                Log::info(__METHOD__, ['message' => '用户数据不存在创建用户', 'adminId' => $adminId, 'user' => json_encode($user)]);
+                debug_log_info(__METHOD__, ['message' => '用户数据不存在创建用户', 'adminId' => $adminId, 'user' => json_encode($user)]);
                 $userOfficialAccountData = [
                     "subscribe_time" => $data,
                     "sex" => $user["sex"] ?? 0,//值为1时是男性，值为2时是女性，值为0时是未知
@@ -369,7 +368,7 @@ class WeChatOffiaccountService
             //回复消息
             return self::autoReplyEvent($message, $adminId);
         } catch (\Throwable $e) {
-            Log::error(__METHOD__, ["message" => $e->getMessage()]);
+            error_log_info(__METHOD__, ["message" => $e->getMessage()]);
             return null;
         }
     }
@@ -386,7 +385,7 @@ class WeChatOffiaccountService
             $userOfficialAccount->is_subscribe = 2;
             $userOfficialAccount->save();
         } else {
-            Log::info("关注回复异常: 未检测到取关用户信息");
+            debug_log_info("关注回复异常: 未检测到取关用户信息");
         }
     }
 

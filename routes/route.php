@@ -19,6 +19,7 @@ Route::group([
 
     $router->get('Wechat/pre-authorized/{appId}', 'WeChat\OpenPlatformController@preAuthorizationJump');
     $router->get('Wechat/authorized/{appId}', 'WeChat\OpenPlatformController@authorized');
+    $router->get('Wechat/pushSwitch/{appId}', 'WeChat\OpenPlatformController@smartPushSwitch');
 });
 
 Route::group([

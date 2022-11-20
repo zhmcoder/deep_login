@@ -13,6 +13,7 @@ class WeChatTemplateService
 {
     /**
      * 公众号模板消息
+     *
      * @param $appId
      * @param $userId
      * @param $templateId

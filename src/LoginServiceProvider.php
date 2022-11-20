@@ -31,6 +31,7 @@ class LoginServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/route.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'deep-login');
 
+        $this->registerPublishing();
     }
 
     public function register()
@@ -40,6 +41,13 @@ class LoginServiceProvider extends ServiceProvider
         $this->registerRouteMiddleware();
 
         $this->commands($this->commands);
+    }
+
+    protected function registerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([__DIR__ . '/../resources/views' => resource_path('views')], 'deep-login-views');
+        }
     }
 
     protected function registerRouteMiddleware()
