@@ -43,11 +43,11 @@ class WeChatTemplateService
                     //    'appid' => $appId,
                     //    'pagepath' => 'pages/shop/shop', // 首页
                     //],
-                    'client_msg_id' => md5($toUser . $userId),
+                    'client_msg_id' => md5($toUser . $userId . time()),
                     'data' => [
                         'first' => ['value' => '您好~'],
                         'keyword1' => ['value' => 'test'],
-                        'keyword2' => ['value' => 300],
+                        'keyword2' => ['value' => 3],
                         'remark' => ['value' => '👉 点击此消息继续精彩内容~'],
                     ]
                 ];
