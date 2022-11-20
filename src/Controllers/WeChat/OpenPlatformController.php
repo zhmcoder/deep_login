@@ -3,19 +3,20 @@
 namespace Andruby\Login\Controllers\WeChat;
 
 use Andruby\Login\Controllers\BaseController;
-use Andruby\Login\Models\Templatelist;
-use Andruby\Login\Models\WxAuthorization;
-use Andruby\Login\Services\WeChatOffiaccountService;
-use Andruby\Login\Services\WeChatTemplateService;
+use Andruby\Login\Models\WeChat\Templatelist;
+use Andruby\Login\Models\WeChat\WxAuthorization;
+use Andruby\Login\Services\WeChat\OffiaccountService;
+use Andruby\Login\Services\WeChat\PlatformService;
+use Andruby\Login\Services\WeChat\TemplateService;
+use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\XML;
+use EasyWeChat\OpenPlatform\Server\Guard;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use EasyWeChat\Kernel\Support\XML;
 use Illuminate\Support\Facades\Log;
-use Andruby\Login\Services\WeChatPlatformService;
-use EasyWeChat\OpenPlatform\Server\Guard;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class OpenPlatformController extends BaseController
         $dashUrl = rtrim(env('DASH_URL'), '/dadmin#/');
         $view = view('wx.op.authorized')->with(['dash_url' => $dashUrl]);
 
-        $openPlatform = WeChatPlatformService::platform();
+        $openPlatform = PlatformService::platform();
 
         // 重定向地址
         $redirectUrl = join('/', [rtrim(config('app.url'), '/'), "Api/Wechat/authorized/{$appId}"]);
@@ -73,7 +74,7 @@ class OpenPlatformController extends BaseController
             ]);
         }
 
-        $openPlatform = WeChatPlatformService::platform();
+        $openPlatform = PlatformService::platform();
         try {
             $response = $openPlatform->handleAuthorize($code);
         } catch (\Exception $e) {
@@ -132,20 +133,20 @@ class OpenPlatformController extends BaseController
             $payload = XML::parse($content);
             debug_log_info(__METHOD__, [$content, $payload]);
 
-            if (!$platform = WeChatPlatformService::platform()) {
+            if (!$platform = PlatformService::platform()) {
                 error_log_info(__METHOD__, ['tips' => 'open platform not found']);
                 $this->responseJson(self::CODE_SHOW_MSG, 'open platform not found');
             }
 
             $server = $platform->server;
             $server->push(function ($message) {
-                WeChatPlatformService::authorized($message);
+                PlatformService::authorized($message);
             }, Guard::EVENT_AUTHORIZED);
             $server->push(function ($message) {
-                WeChatPlatformService::updateAuthorized($message);
+                PlatformService::updateAuthorized($message);
             }, Guard::EVENT_UPDATE_AUTHORIZED);
             $server->push(function ($message) {
-                WeChatPlatformService::unAuthorized($message);
+                PlatformService::unAuthorized($message);
             }, Guard::EVENT_UNAUTHORIZED);
 
             return $server->serve();
@@ -170,7 +171,7 @@ class OpenPlatformController extends BaseController
             $input = $request->input();
             $content = $request->getContent();
             debug_log_info(__METHOD__, ["content" => $content, "input" => $input]);
-            return WeChatOffiaccountService::eventFormat($appId);
+            return OffiaccountService::eventFormat($appId);
         } catch (\Exception $e) {
             error_log_info(__METHOD__, [$e->getMessage()]);
         }
@@ -197,7 +198,7 @@ class OpenPlatformController extends BaseController
                             $tmpShortId = env('SMART_RECHARGE_NOTICE', 'OPENTM417049252');
                             $rechargeTemplate = Templatelist::query()->where('uuid', $wxAuth->uuid)->where('short_id', $tmpShortId)->first();
                             if (!$rechargeTemplate) {
-                                $openPlatform = WeChatPlatformService::platform();
+                                $openPlatform = PlatformService::platform();
                                 $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
                                 $res = $oa->template_message->addTemplate($tmpShortId);
                                 debug_log_info('Open Template Msg  Resp：' . json_encode($res));
@@ -246,6 +247,14 @@ class OpenPlatformController extends BaseController
     }
 
 
+    /**
+     * 公众号 - 模板消息用例
+     *
+     * @param string $appId
+     * @throws GuzzleException
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     */
     public function sendTemplateMsg($appId = '')
     {
         $unionid = 'ozv9e5w__oXbRZM74BuzTEGLXbgk';
@@ -261,6 +270,6 @@ class OpenPlatformController extends BaseController
             'remark' => ['value' => '该消息仅推送给已订阅用户，如有打扰可在小程序内"退订”'],
         ];
 
-        WeChatTemplateService::sendTemplateMsg($appId, $unionid, $pagePath, $pushMsg);
+        TemplateService::sendTemplateMsg($appId, $unionid, $pagePath, $pushMsg);
     }
 }
