@@ -13,14 +13,15 @@ Route::group([
     $router->get('WxQrcode/qrcode', 'WxQrcodeController@qrcode')->name('WxQrcode.qrcode');
     $router->get('WxQrcode/default_login', 'WxQrcodeController@default_login')->name('WxQrcode.default_login');
 
-    // 微信开放平台
-    $router->post('Wechat/ticket', 'WeChat\OpenPlatformController@ticket');
-    $router->post('Wechat/event/{appId}', 'WeChat\OpenPlatformController@event');
+    // 微信开放平台接口
+    $router->post('Wechat/ticket', 'WeChat\OpenPlatformController@ticket'); // 授权事件接收配置
+    $router->post('Wechat/event/{appId}', 'WeChat\OpenPlatformController@event'); // 公众号事件
+    $router->get('Wechat/sendTemplateMsg/{appId}', 'WeChat\OpenPlatformController@sendTemplateMsg'); // 发送消息
 
-    $router->get('Wechat/pre-authorized/{appId}', 'WeChat\OpenPlatformController@preAuthorizationJump');
-    $router->get('Wechat/authorized/{appId}', 'WeChat\OpenPlatformController@authorized');
-    $router->get('Wechat/pushSwitch/{appId}', 'WeChat\OpenPlatformController@smartPushSwitch');
-    $router->get('Wechat/sendTemplateMsg/{appId}', 'WeChat\OpenPlatformController@sendTemplateMsg');
+    // 微信开放平台配置
+    $router->get('Wechat/pre-authorized/{appId}', 'WeChat\MpController@preAuthorizationJump'); // 微信开放平台授权页面
+    $router->get('Wechat/authorized/{appId}', 'WeChat\MpController@authorized'); // 微信开放平台授权回调
+    $router->get('Wechat/pushSwitch/{appId}', 'WeChat\MpController@smartPushSwitch'); // 公众号 - 推送开关
 });
 
 Route::group([
