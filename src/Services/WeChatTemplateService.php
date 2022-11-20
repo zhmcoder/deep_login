@@ -45,10 +45,10 @@ class WeChatTemplateService
                     //],
                     'client_msg_id' => md5($toUser . $userId . time()),
                     'data' => [
-                        'first' => ['value' => '您好~'],
-                        'keyword1' => ['value' => 'test'],
-                        'keyword2' => ['value' => 3],
-                        'remark' => ['value' => '👉 点击此消息继续精彩内容~'],
+                        'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价'],
+                        'keyword1' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
+                        'keyword2' => ['value' => 15.75],
+                        'remark' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
                     ]
                 ];
                 debug_log_info(__METHOD__ . " Send Template Msg ", $data);
