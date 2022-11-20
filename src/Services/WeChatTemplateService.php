@@ -45,7 +45,7 @@ class WeChatTemplateService
                     ],
                     'client_msg_id' => md5($toUser . $userId . time()),
                     'data' => [
-                        'first' => ['value' => '服务即将开始通知'],
+                        'first' => ['value' => '您关注的团长：嘻蜜团发布了新的团购'],
                         'keyword1' => ['value' => '商品描述'],
                         'keyword2' => ['value' => '2022-11-12 12:33:31'],
                         'keyword3' => ['value' => '嘻蜜团'],
