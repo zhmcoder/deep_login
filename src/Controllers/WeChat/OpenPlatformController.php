@@ -201,7 +201,7 @@ class OpenPlatformController extends BaseController
                                 $res = $oa->template_message->addTemplate($tmpShortId);
                                 if (isset($res['errcode']) && $res['errcode'] != 0) {
                                     $msg = $res['errmsg'] ?? '-';
-                                    return $this->error("开启充值成功提醒失败 ({$msg})");
+                                    $this->responseJson(self::CODE_SHOW_MSG, "开启充值成功提醒失败 ({$msg})");
                                 }
                                 debug_log_info('Open Template Msg  Resp：' . json_encode($res));
 
@@ -209,6 +209,7 @@ class OpenPlatformController extends BaseController
                                 $res1 = $oa->template_message->getPrivateTemplates();
                                 if (isset($res1['errcode']) && $res1['errcode'] != 0) {
                                     error_log_info('Get Template info fail! Resp：' . json_encode($res1));
+                                    $this->responseJson(self::CODE_SHOW_MSG, "Get Template info fail");
                                 }
                                 $templatelist = array_column($res1['template_list'], null, 'template_id');
                                 $template = $templatelist[$templateId] ?? [];
@@ -221,23 +222,25 @@ class OpenPlatformController extends BaseController
                                 $res2 = Templatelist::updateOrCreate($map, $new);
                                 if (!$res2) {
                                     error_log_info('insert Template info fail! ', compact('map', 'new'));
+                                    $this->responseJson(self::CODE_SHOW_MSG, "insert Template info fail!");
                                 }
                             }
                         }
 
                         $resp = $wxAuth->update(['recharge_notice' => $switch]);
                         if (!$resp) {
-                            return $this->error("操作失败");
+                            $this->responseJson(self::CODE_SHOW_MSG, '操作失败');
                         }
                         break;
                 }
 
-                return $this->success();
+                $this->responseJson(self::CODE_SUCCESS_CODE, '成功');
             } else {
-                return $this->error("未查询到授权公众号");
+                $this->responseJson(self::CODE_SHOW_MSG, '未查询到授权公众号');
             }
         } catch (\Exception $e) {
             error_log_info('Recharge Notice Switch Exception! Msg：' . $e->getMessage());
+            $this->responseJson(self::CODE_SHOW_MSG, '失败');
         }
     }
 }
