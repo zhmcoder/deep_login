@@ -45,11 +45,10 @@ class WeChatTemplateService
                     //],
                     'client_msg_id' => md5($toUser . $userId),
                     'data' => [
-                        'first' => ['value' => '恭喜您，充值成功，快去继续观看吧~'],
-                        'keyword1' => ['value' => '余额充值'],
-                        'keyword2' => ['value' => sprintf('%.2f', 1)],
-                        'keyword3' => ['value' => date('Y年m月d日 H:m', time())],
-                        'remark' => ['value' => '👉 点击此消息继续播放后续精彩内容~'],
+                        'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价~'],
+                        'keyword1' => ['value' => 'test'],
+                        'keyword2' => ['value' => 300],
+                        'remark' => ['value' => '👉 点击此消息继续精彩内容~'],
                     ]
                 ];
                 debug_log_info(__METHOD__ . " Send Template Msg ", $data);
