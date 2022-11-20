@@ -57,6 +57,8 @@ class WeChatTemplateService
                 $openPlatform = WeChatPlatformService::platform($wxAuthorization->platform->uuid); // 三方平台
                 $officialAccount = $openPlatform->officialAccount($wxAuthorization->uuid, $refreshToken);  // 微信公众号
                 $response = $officialAccount->template_message->send($data);
+
+                debug_log_info(__METHOD__ . " Send Template Result ", $response);
                 if ($response['errcode'] != 0) {
                     error_log_info(__METHOD__ . " Send Template Fail! ", $response);
                 }
