@@ -16,12 +16,11 @@ class WeChatTemplateService
      *
      * @param $appId
      * @param $userId
-     * @param $templateId
      * @throws GuzzleException
      * @throws InvalidArgumentException
      * @throws InvalidConfigException
      */
-    public static function sendTemplateMsg($appId, $userId, $templateId)
+    public static function sendTemplateMsg($appId, $userId)
     {
         // 公众号关联小程序信息
         $wxAuthorization = WxAuthorization::with("platform")->where("status", 1)->where("type", 0)->first();

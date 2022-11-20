@@ -6,6 +6,7 @@ use Andruby\Login\Controllers\BaseController;
 use Andruby\Login\Models\Templatelist;
 use Andruby\Login\Models\WxAuthorization;
 use Andruby\Login\Services\WeChatOffiaccountService;
+use Andruby\Login\Services\WeChatTemplateService;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
@@ -242,5 +243,13 @@ class OpenPlatformController extends BaseController
             error_log_info('Recharge Notice Switch Exception! Msg：' . $e->getMessage());
             $this->responseJson(self::CODE_SHOW_MSG, '失败');
         }
+    }
+
+    public function sendTemplateMsg()
+    {
+        $userId = 3;
+        $appId = 'wx63212c9e065e414e';
+
+        WeChatTemplateService::sendTemplateMsg($appId, $userId);
     }
 }
