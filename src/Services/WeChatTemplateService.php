@@ -41,7 +41,7 @@ class WeChatTemplateService
                     'template_id' => $template_id,
                     'miniprogram' => [
                         'appid' => $appId,
-                        'pagepath' => 'pages/index/index', // 首页
+                        'pagepath' => 'pages/shop/shop', // 首页
                     ],
                     'client_msg_id' => md5($toUser . $userId),
                     'data' => [
