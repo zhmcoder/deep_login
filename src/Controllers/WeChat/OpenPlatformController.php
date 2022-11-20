@@ -199,11 +199,11 @@ class OpenPlatformController extends BaseController
                                 $openPlatform = WeChatPlatformService::platform('');
                                 $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
                                 $res = $oa->template_message->addTemplate($tmpShortId);
+                                debug_log_info('Open Template Msg  Resp：' . json_encode($res));
                                 if (isset($res['errcode']) && $res['errcode'] != 0) {
                                     $msg = $res['errmsg'] ?? '-';
                                     $this->responseJson(self::CODE_SHOW_MSG, "开启充值成功提醒失败 ({$msg})");
                                 }
-                                debug_log_info('Open Template Msg  Resp：' . json_encode($res));
 
                                 $templateId = $res['template_id'] ?? '-';
                                 $res1 = $oa->template_message->getPrivateTemplates();
