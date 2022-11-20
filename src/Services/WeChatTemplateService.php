@@ -45,10 +45,12 @@ class WeChatTemplateService
                     ],
                     'client_msg_id' => md5($toUser . $userId . time()),
                     'data' => [
-                        'first' => ['value' => '您好，拼团活动正在进行中，点击查看详情，享受低价'],
-                        'keyword1' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
-                        'keyword2' => ['value' => sprintf('%.2f', 17.75)],
-                        'remark' => ['value' => '压缩毛巾一次性旅行装加厚小方巾便携式糖果洁面巾压缩洗脸巾批发'],
+                        'first' => ['value' => '服务即将开始通知'],
+                        'keyword1' => ['value' => '商品描述'],
+                        'keyword2' => ['value' => '2022-11-12 12:33:31'],
+                        'keyword3' => ['value' => '嘻蜜团'],
+                        'keyword4' => ['value' => '商品标题'],
+                        'remark' => ['value' => '该消息仅推送给已订阅用户，如有打扰可在小程序内"退订”'],
                     ]
                 ];
                 debug_log_info(__METHOD__ . " Send Template Msg ", $data);
