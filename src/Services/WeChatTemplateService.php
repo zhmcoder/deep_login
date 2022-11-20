@@ -15,12 +15,14 @@ class WeChatTemplateService
      * 公众号模板消息
      *
      * @param $appId
-     * @param $userId
+     * @param $unionid
+     * @param string $pagePath
+     * @param array $pushMsg
      * @throws GuzzleException
      * @throws InvalidArgumentException
      * @throws InvalidConfigException
      */
-    public static function sendTemplateMsg($appId, $userId)
+    public static function sendTemplateMsg($appId, $unionid, $pagePath = '', $pushMsg = [])
     {
         // 公众号关联小程序信息
         $wxAuthorization = WxAuthorization::with("platform")->where("status", 1)->where("type", 0)->first();
@@ -29,7 +31,7 @@ class WeChatTemplateService
         }
         // 充值提醒开启
         if ($wxAuthorization->recharge_notice) {
-            $toUser = UserOfficialAccount::where('user_id', $userId)->where('uuid', $wxAuthorization->uuid)->value('open_id');
+            $toUser = UserOfficialAccount::where('unionid', $unionid)->where('uuid', $wxAuthorization->uuid)->value('open_id');
 
             $template_id = Templatelist::where('uuid', $wxAuthorization->uuid)->where('short_id', env('SMART_RECHARGE_NOTICE', 'OPENTM417049252'))->value('template_id');
 
@@ -41,22 +43,15 @@ class WeChatTemplateService
                     'template_id' => $template_id,
                     'miniprogram' => [
                         'appid' => $appId,
-                        'pagepath' => 'pages/shop/shop', // 首页
+                        'pagepath' => $pagePath,
                     ],
-                    'client_msg_id' => md5($toUser . $userId . time()),
-                    'data' => [
-                        'first' => ['value' => '您关注的团长：嘻蜜团发布了新的团购'],
-                        'keyword1' => ['value' => '商品描述'],
-                        'keyword2' => ['value' => '2022-11-12 12:33:31'],
-                        'keyword3' => ['value' => '嘻蜜团'],
-                        'keyword4' => ['value' => '商品标题'],
-                        'remark' => ['value' => '该消息仅推送给已订阅用户，如有打扰可在小程序内"退订”'],
-                    ]
+                    'client_msg_id' => md5($toUser . $unionid . time()),
+                    'data' => $pushMsg,
                 ];
                 debug_log_info(__METHOD__ . " Send Template Msg ", $data);
 
                 $refreshToken = $wxAuthorization->refresh_token ?? null;
-                $openPlatform = WeChatPlatformService::platform($wxAuthorization->platform->uuid); // 三方平台
+                $openPlatform = WeChatPlatformService::platform(); // 三方平台
                 $officialAccount = $openPlatform->officialAccount($wxAuthorization->uuid, $refreshToken);  // 微信公众号
                 $response = $officialAccount->template_message->send($data);
 

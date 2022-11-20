@@ -13,10 +13,9 @@ class WeChatPlatformService
     /**
      * 获取三方平台配置信息
      *
-     * @param string $appId
      * @return Application
      */
-    public static function platform(string $appId)
+    public static function platform()
     {
         $options = config('deep_login.open_app_config');
 

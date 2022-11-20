@@ -31,10 +31,10 @@ class OpenPlatformController extends BaseController
     public function preAuthorizationJump($appId)
     {
         // 跳转页面
-        $dashUrl = rtrim(env('DASH_URL'), '/');
+        $dashUrl = rtrim(env('DASH_URL'), '/dadmin#/');
         $view = view('wx.op.authorized')->with(['dash_url' => $dashUrl]);
 
-        $openPlatform = WeChatPlatformService::platform($appId);
+        $openPlatform = WeChatPlatformService::platform();
 
         // 重定向地址
         $redirectUrl = join('/', [rtrim(config('app.url'), '/'), "Api/Wechat/authorized/{$appId}"]);
@@ -73,7 +73,7 @@ class OpenPlatformController extends BaseController
             ]);
         }
 
-        $openPlatform = WeChatPlatformService::platform($appId);
+        $openPlatform = WeChatPlatformService::platform();
         try {
             $response = $openPlatform->handleAuthorize($code);
         } catch (\Exception $e) {
@@ -109,7 +109,7 @@ class OpenPlatformController extends BaseController
             'logo' => $mpInfo['authorizer_info']['head_img'] ?? null,
             'qrcode' => $mpInfo['authorizer_info']['qrcode_url'] ?? null,
             'uuid' => $uuid,
-            'platform_id' => $wxPlatformCfg->id ?? 0
+            'platform_id' => $wxPlatformCfg->id ?? 1
         ];
 
         WxAuthorization::query()->updateOrCreate(['uuid' => $uuid], $new);
@@ -132,7 +132,7 @@ class OpenPlatformController extends BaseController
             $payload = XML::parse($content);
             debug_log_info(__METHOD__, [$content, $payload]);
 
-            if (!$platform = WeChatPlatformService::platform($payload['AppId'] ?? '')) {
+            if (!$platform = WeChatPlatformService::platform()) {
                 error_log_info(__METHOD__, ['tips' => 'open platform not found']);
                 $this->responseJson(self::CODE_SHOW_MSG, 'open platform not found');
             }
@@ -192,18 +192,18 @@ class OpenPlatformController extends BaseController
 
             if ($wxAuth) {
                 switch ($type) {
-                    case 1: // 商品推送体系怀
+                    case 1: // 商品推送
                         if ($switch) {
                             $tmpShortId = env('SMART_RECHARGE_NOTICE', 'OPENTM417049252');
                             $rechargeTemplate = Templatelist::query()->where('uuid', $wxAuth->uuid)->where('short_id', $tmpShortId)->first();
                             if (!$rechargeTemplate) {
-                                $openPlatform = WeChatPlatformService::platform('');
+                                $openPlatform = WeChatPlatformService::platform();
                                 $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
                                 $res = $oa->template_message->addTemplate($tmpShortId);
                                 debug_log_info('Open Template Msg  Resp：' . json_encode($res));
                                 if (isset($res['errcode']) && $res['errcode'] != 0) {
                                     $msg = $res['errmsg'] ?? '-';
-                                    $this->responseJson(self::CODE_SHOW_MSG, "开启充值成功提醒失败 ({$msg})");
+                                    $this->responseJson(self::CODE_SHOW_MSG, "开启推送失败 ({$msg})");
                                 }
 
                                 $templateId = $res['template_id'] ?? '-';
@@ -245,10 +245,22 @@ class OpenPlatformController extends BaseController
         }
     }
 
+
     public function sendTemplateMsg($appId = '')
     {
-        $userId = 3;
+        $unionid = 'ozv9e5w__oXbRZM74BuzTEGLXbgk';
 
-        WeChatTemplateService::sendTemplateMsg($appId, $userId);
+        $pagePath = 'pages/shop/shop';
+
+        $pushMsg = [
+            'first' => ['value' => '您关注的团长：嘻蜜团发布了新的团购'],
+            'keyword1' => ['value' => '商品描述'],
+            'keyword2' => ['value' => '2022-11-12 12:33:31'],
+            'keyword3' => ['value' => '嘻蜜团'],
+            'keyword4' => ['value' => '商品标题'],
+            'remark' => ['value' => '该消息仅推送给已订阅用户，如有打扰可在小程序内"退订”'],
+        ];
+
+        WeChatTemplateService::sendTemplateMsg($appId, $unionid, $pagePath, $pushMsg);
     }
 }

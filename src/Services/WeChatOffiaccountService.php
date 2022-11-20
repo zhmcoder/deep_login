@@ -42,7 +42,7 @@ class WeChatOffiaccountService
             }
 
             $refreshToken = $wxAuthorization->refresh_token ?? null;
-            $openPlatform = WeChatPlatformService::platform($wxAuthorization->platform->uuid);
+            $openPlatform = WeChatPlatformService::platform();
             $officialAccount = $openPlatform->officialAccount($appId, $refreshToken);
 
             $result = $officialAccount->qrcode->temporary($userId, 1 * 24 * 3600);
@@ -67,7 +67,7 @@ class WeChatOffiaccountService
             }
             $refreshToken = self::$wxAuthorization->refresh_token ?? null;
             $adminId = self::$wxAuthorization->admin_id ?? null;
-            $openPlatform = WeChatPlatformService::platform(self::$wxAuthorization->platform->uuid);
+            $openPlatform = WeChatPlatformService::platform();
             self::$officialAccount = $openPlatform->officialAccount($appId, $refreshToken);
             $server = self::$officialAccount->server;
             $server->push(function ($message) use ($adminId) {
