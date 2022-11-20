@@ -3,7 +3,7 @@
 namespace Andruby\Login\Controllers\WeChat;
 
 use Andruby\Login\Controllers\BaseController;
-use Andruby\Login\Models\TemplateList;
+use Andruby\Login\Models\Templatelist;
 use Andruby\Login\Models\WxAuthorization;
 use Andruby\Login\Services\WeChatOffiaccountService;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
@@ -194,7 +194,7 @@ class OpenPlatformController extends BaseController
                     case 1: // 商品推送体系怀
                         if ($switch) {
                             $tmpShortId = env('SMART_RECHARGE_NOTICE', 'OPENTM417049252');
-                            $rechargeTemplate = TemplateList::query()->where('uuid', $wxAuth->uuid)->where('short_id', $tmpShortId)->first();
+                            $rechargeTemplate = Templatelist::query()->where('uuid', $wxAuth->uuid)->where('short_id', $tmpShortId)->first();
                             if (!$rechargeTemplate) {
                                 $openPlatform = WeChatPlatformService::platform('');
                                 $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
@@ -218,7 +218,7 @@ class OpenPlatformController extends BaseController
                                     'template_id' => $templateId,
                                     'content' => $template['content'] ?? '',
                                 ];
-                                $res2 = TemplateList::updateOrCreate($map, $new);
+                                $res2 = Templatelist::updateOrCreate($map, $new);
                                 if (!$res2) {
                                     error_log_info('insert Template info fail! ', compact('map', 'new'));
                                 }

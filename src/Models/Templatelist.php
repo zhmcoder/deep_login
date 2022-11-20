@@ -5,10 +5,15 @@ namespace Andruby\Login\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TemplateList extends Model
+class Templatelist extends Model
 {
     // 软删除
     use SoftDeletes;
+
+    /**
+     * @var string
+     */
+    protected $table = 'template_lists';
 
     /**
      * 这个属性应该被转换为原生类型.
