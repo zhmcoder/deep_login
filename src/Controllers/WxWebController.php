@@ -25,9 +25,15 @@ class WxWebController extends BaseController
         $target_url = $request->input('target_url');
         $app_id = env('APP_ID') ?? $request->input('app_id');
         $code = $request->input('code');
+
         debug_log_info('target_url = ' . $target_url);
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);
+
+        if (empty($code)) {
+            error_log_info('code is empty', ['code' => $code]);
+            header('Location:' . $target_url);
+        }
 
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $oauth = $app->oauth;
@@ -74,6 +80,11 @@ class WxWebController extends BaseController
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);
         debug_log_info('user_token = ' . $user_token);
+
+        if (empty($code)) {
+            error_log_info('code is empty', ['code' => $code]);
+            header('Location:' . $target_url);
+        }
 
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $oauth = $app->oauth;

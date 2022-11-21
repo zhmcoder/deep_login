@@ -167,6 +167,7 @@ class Member extends Model
             Member::create($data);
             return true;
         } catch (\Exception $e) {
+            error_log_info('register member error', [$e->getMessage()]);
             return false;
         }
     }
@@ -216,6 +217,7 @@ class Member extends Model
             Member::create($data);
             return true;
         } catch (\Exception $e) {
+            error_log_info('register member error', [$e->getMessage()]);
             return false;
         }
     }
@@ -235,6 +237,7 @@ class Member extends Model
             Member::create($data);
             return true;
         } catch (\Exception $e) {
+            error_log_info('register member error', [$e->getMessage()]);
             return false;
         }
     }
