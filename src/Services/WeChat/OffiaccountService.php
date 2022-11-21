@@ -88,6 +88,7 @@ class OffiaccountService
     public static function eventCallBack($message, $adminId)
     {
         debug_log_info('[ WeChat ] [ MP ] [ API ] Message: ' . json_encode($message));
+
         $replayData = null;
         $msgType = $message['MsgType'] ?? "";
         switch ($msgType) {
@@ -338,6 +339,7 @@ class OffiaccountService
     {
         try {
             debug_log_info(__METHOD__, ['message' => json_encode($message), 'adminId' => $adminId]);
+
             //注册用户
             $user = self::$officialAccount->user->get($message["FromUserName"]);
             $userOfficialAccount = UserOfficialAccount::getUserInfo($message["FromUserName"], self::$wxAuthorization->uuid, $adminId);
@@ -368,6 +370,7 @@ class OffiaccountService
             //回复消息
             return self::autoReplyEvent($message, $adminId);
         } catch (\Throwable $e) {
+
             error_log_info(__METHOD__, ["message" => $e->getMessage()]);
             return null;
         }

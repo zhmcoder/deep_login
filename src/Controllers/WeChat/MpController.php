@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -63,6 +62,8 @@ class MpController extends BaseController
         $dashUrl = rtrim(env('DASH_URL'), '/');
 
         if (!$appId || !$code) {
+            error_log_info(__METHOD__, ['appId' => $appId, 'code' => $code]);
+
             return $view->with([
                 'status' => false, 'title' => '[A01] 输入参数验证错误', 'dash_url' => $dashUrl
             ]);
@@ -72,12 +73,16 @@ class MpController extends BaseController
         try {
             $response = $openPlatform->handleAuthorize($code);
         } catch (\Exception $e) {
+            error_log_info(__METHOD__, ['error' => $e->getMessage()]);
+
             return $view->with([
                 'status' => false, 'title' => "[A05] 授权错误", 'tips' => $e->getMessage(), 'dash_url' => $dashUrl
             ]);
         }
 
         if (isset($response['errcode']) && $response['errcode'] != 0) {
+            error_log_info(__METHOD__, ['response' => $response]);
+
             return $view->with([
                 'status' => false, 'title' => "[A06] 授权错误", 'tips' => $response['errmsg'] ?? '', 'dash_url' => $dashUrl
             ]);
@@ -87,7 +92,7 @@ class MpController extends BaseController
         try {
             $mpInfo = $openPlatform->getAuthorizer($uuid);
         } catch (\Exception $e) {
-            Log::warning(__METHOD__, ['error' => $e->getMessage()]);
+            error_log_info(__METHOD__, ['error' => $e->getMessage()]);
 
             return $view->with([
                 'status' => false, 'title' => "[A07] 授权错误", 'tips' => $e->getMessage()
@@ -103,11 +108,12 @@ class MpController extends BaseController
             'name' => $mpInfo['authorizer_info']['nick_name'] ?? null,
             'logo' => $mpInfo['authorizer_info']['head_img'] ?? null,
             'qrcode' => $mpInfo['authorizer_info']['qrcode_url'] ?? null,
-            'uuid' => $uuid,
-            'platform_id' => $wxPlatformCfg->id ?? 1
+            'uuid' => $uuid
         ];
 
         WxAuthorization::query()->updateOrCreate(['uuid' => $uuid], $new);
+
+        debug_log_info(__METHOD__, ['message' => '授权成功', 'appId' => $appId, 'code' => $code, 'WxAuthorization' => $new]);
 
         return $view->with([
             'status' => true, 'title' => '授权成功！', 'dash_url' => $dashUrl
@@ -138,18 +144,25 @@ class MpController extends BaseController
                                 $openPlatform = PlatformService::platform();
                                 $oa = $openPlatform->officialAccount($wxAuth->uuid, $wxAuth->refresh_token);
                                 $res = $oa->template_message->addTemplate($tmpShortId);
-                                debug_log_info('Open Template Msg  Resp：' . json_encode($res));
+                                debug_log_info(__METHOD__, ['message' => 'Open Template Msg  Resp', $res]);
+
                                 if (isset($res['errcode']) && $res['errcode'] != 0) {
+                                    error_log_info(__METHOD__, ['message' => '开启推送失败', $res]);
+
                                     $msg = $res['errmsg'] ?? '-';
                                     $this->responseJson(self::CODE_SHOW_MSG, "开启推送失败 ({$msg})");
                                 }
 
                                 $templateId = $res['template_id'] ?? '-';
                                 $res1 = $oa->template_message->getPrivateTemplates();
+                                debug_log_info(__METHOD__, ['message' => 'Get Template info fail! Resp', $res1]);
+
                                 if (isset($res1['errcode']) && $res1['errcode'] != 0) {
                                     error_log_info('Get Template info fail! Resp：' . json_encode($res1));
+
                                     $this->responseJson(self::CODE_SHOW_MSG, "Get Template info fail");
                                 }
+
                                 $templatelist = array_column($res1['template_list'], null, 'template_id');
                                 $template = $templatelist[$templateId] ?? [];
                                 $map = ['uuid' => $wxAuth->uuid, 'short_id' => $tmpShortId];
@@ -161,6 +174,7 @@ class MpController extends BaseController
                                 $res2 = Templatelist::updateOrCreate($map, $new);
                                 if (!$res2) {
                                     error_log_info('insert Template info fail! ', compact('map', 'new'));
+
                                     $this->responseJson(self::CODE_SHOW_MSG, "insert Template info fail!");
                                 }
                             }
@@ -179,6 +193,7 @@ class MpController extends BaseController
             }
         } catch (\Exception $e) {
             error_log_info('Recharge Notice Switch Exception! Msg：' . $e->getMessage());
+
             $this->responseJson(self::CODE_SHOW_MSG, '失败');
         }
     }

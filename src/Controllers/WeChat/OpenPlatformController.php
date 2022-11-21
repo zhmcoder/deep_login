@@ -67,7 +67,9 @@ class OpenPlatformController extends BaseController
         try {
             $input = $request->input();
             $content = $request->getContent();
+
             debug_log_info(__METHOD__, ["content" => $content, "input" => $input]);
+
             return OffiaccountService::eventFormat($appId);
         } catch (\Exception $e) {
             error_log_info(__METHOD__, [$e->getMessage()]);

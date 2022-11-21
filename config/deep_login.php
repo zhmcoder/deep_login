@@ -84,9 +84,9 @@ return [
     // 开放平台
     'open_app_config' => [
         'app_id' => 'wxbdf4a33dce0897c2',
-        'secret' => '1042e71924ffda9069ee216a3d62e067',
-        'token' => 'U4CYE0VDQJYCT2LVR3NPVDUL39S6W9HJ',
-        'aes_key' => 'dUtt4lAX7folKU7Flz1bkoQXtMiCFfZAs4VDxJAiFyP',
+        'secret' => '',
+        'token' => '',
+        'aes_key' => '',
         'log' => [
             'level' => 'info',
             'file' => storage_path('logs/wechat.log'),
