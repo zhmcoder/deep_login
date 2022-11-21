@@ -80,4 +80,16 @@ return [
             'scene' => 'login',
         ],
     ],
+
+    // 开放平台
+    'open_app_config' => [
+        'app_id' => 'wxbdf4a33dce0897c2',
+        'secret' => '',
+        'token' => '',
+        'aes_key' => '',
+        'log' => [
+            'level' => 'info',
+            'file' => storage_path('logs/wechat.log'),
+        ],
+    ],
 ];
