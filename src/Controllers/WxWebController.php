@@ -30,7 +30,7 @@ class WxWebController extends BaseController
         debug_log_info('app_id = ' . $app_id);
         debug_log_info('code = ' . $code);
 
-        if (empty($code)) {
+        if (empty($code) || !is_string($code)) {
             error_log_info('code is empty', ['code' => $code]);
             header('Location:' . $target_url);
         }

@@ -74,6 +74,11 @@ class WxQrcodeController extends BaseController
         $app = Factory::officialAccount(config('deep_login.' . $app_id));
         $oauth = $app->oauth;
 
+        if (empty($code) || !is_string($code)) {
+            error_log_info('code is empty', ['code' => $code]);
+            $this->responseJson(self::CODE_TOKEN, 'success', []);
+        }
+
         $user = $oauth->userFromCode($code);
         debug_log_info('user = ' . json_encode($user));
         $user = $user->toArray();
