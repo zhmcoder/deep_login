@@ -22,10 +22,6 @@
         "andruby/tokens-auth": "^0.1.1",
         "w7corp/easywechat": "~4|~5|~6"
     },
-    "require-dev": {
-        "orchestra/testbench": "^5",
-        "fzaninotto/faker": "^1.8"
-    },
     "autoload": {
         "psr-4": {
             "Andruby\\Login\\": "src"
