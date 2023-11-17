@@ -70,7 +70,7 @@ class UserService implements IUserService
             ->first(['uid as user_id', 'nickname', 'head_pic', 'head_pic_small']);
         if ($userInfo) {
             $userInfo = $userInfo->toArray();
-            // $userInfo['token'] = $this->genToken($user_id);
+            $userInfo['token'] = $this->genToken($user_id);
 
             $userInfo['head_pic'] = http_path($userInfo['head_pic']);
             $userInfo['head_pic_small'] = http_path($userInfo['head_pic_small']);
