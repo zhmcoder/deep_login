@@ -93,7 +93,7 @@ class WxMiniController extends BaseController
                 null, null);
 
             $data = $userService->userInfo($user_id);
-            // $data['token'] = $userService->genToken($user_id);
+            $data['token'] = $userService->genToken($user_id);
             $this->responseJson(self::CODE_SUCCESS_CODE, 'success', $data);
 
         } else {
